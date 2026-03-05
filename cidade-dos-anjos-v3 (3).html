@@ -1,0 +1,2730 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Cidade dos Anjos RP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+/* ════════════════════════════════════
+   DESIGN TOKENS
+════════════════════════════════════ */
+:root{
+  --bg:#04030a;--bg2:#07060f;--surface:#0c0a18;--surface2:#100e1e;--card:#0e0c1c;
+  --border:#1c1830;--border2:#2c2045;
+  --gold:#c9a84c;--gold2:#f0d080;--gold3:#7a5e20;--gold4:#3a2c10;--cream:#f0e6d0;
+  --live:#ff3a3a;--live2:#ff7070;
+  --police-c:#60a5fa;--police-bg:#071328;--police-b:#1e3a6e;
+  --criminal-c:#f87171;--criminal-bg:#200808;--criminal-b:#6e1e1e;
+  --medic-c:#4ade80;--medic-bg:#052010;--medic-b:#1a5e30;
+  --civilian-c:#fbbf24;--civilian-bg:#1a1000;--civilian-b:#5e3a00;
+  --mechanic-c:#a78bfa;--mechanic-bg:#100828;--mechanic-b:#3a1e6e;
+  --governo-c:#fb923c;--governo-bg:#180a00;--governo-b:#6e2e00;
+  --twitch:#9147ff;--kick:#53fc18;--youtube:#ff0000;
+  --discord:#5865f2;--instagram:#e1306c;--twitter:#1da1f2;
+  --head:'Cinzel',serif;--body:'Crimson Pro',serif;--mono:'JetBrains Mono',monospace;
+  --r:10px;--rs:6px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--cream);font-family:var(--body);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:0;
+  background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(201,168,76,.055) 0%,transparent 65%),
+             radial-gradient(ellipse 40% 30% at 90% 90%,rgba(107,63,160,.04) 0%,transparent 60%);
+  pointer-events:none}
+body::after{content:'';position:fixed;inset:0;z-index:0;
+  background-image:linear-gradient(rgba(201,168,76,.016) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(201,168,76,.016) 1px,transparent 1px);
+  background-size:55px 55px;pointer-events:none}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* ════════════════════════════════════
+   TOPBAR (always visible)
+════════════════════════════════════ */
+#topbar{
+  position:sticky;top:0;z-index:500;height:58px;
+  background:rgba(4,3,10,.93);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 1.2rem;gap:.9rem;
+  position:relative;z-index:500;
+}
+#topbar::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold3) 30%,var(--gold) 50%,var(--gold3) 70%,transparent)}
+.logo-btn{display:flex;align-items:center;gap:.55rem;text-decoration:none;cursor:pointer;flex-shrink:0;background:none;border:none;padding:0}
+.logo-angel{font-size:1.5rem;filter:drop-shadow(0 0 10px rgba(201,168,76,.8));animation:angFloat 4s ease-in-out infinite}
+@keyframes angFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-4px) rotate(3deg)}}
+.logo-words{display:flex;flex-direction:column;gap:.04rem}
+.logo-main{font-family:var(--head);font-size:.82rem;font-weight:700;letter-spacing:.2em;
+  background:linear-gradient(90deg,var(--gold3),var(--gold2),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo-sub{font-family:var(--mono);font-size:.44rem;letter-spacing:.38em;color:var(--gold3);text-transform:uppercase}
+.search-wrap{flex:1;max-width:340px;position:relative}
+.search-wrap input{width:100%;background:rgba(12,10,24,.8);border:1px solid var(--border);border-radius:var(--rs);
+  color:var(--cream);font-family:var(--mono);font-size:.7rem;padding:.46rem .9rem .46rem 2.2rem;
+  outline:none;transition:border-color .2s,box-shadow .2s}
+.search-wrap input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.09)}
+.search-wrap input::placeholder{color:#2e2a4a}
+.search-ico{position:absolute;left:.7rem;top:50%;transform:translateY(-50%);color:var(--gold3);font-size:.75rem;pointer-events:none}
+.sdrop{position:absolute;top:calc(100% + 5px);left:0;right:0;background:#0d0b1a;border:1px solid var(--border2);
+  border-radius:var(--rs);overflow:hidden;z-index:600;display:none;box-shadow:0 12px 40px rgba(0,0,0,.7)}
+.sdrop.open{display:block}
+.sdrop-item{padding:.55rem .9rem;cursor:pointer;display:flex;align-items:center;gap:.6rem;transition:background .15s;font-size:.85rem}
+.sdrop-item:hover{background:rgba(201,168,76,.06)}
+.sdrop-char{font-family:var(--head);font-size:.72rem;letter-spacing:.04em;color:var(--gold2)}
+.sdrop-info{font-family:var(--mono);font-size:.6rem;color:#4a4060}
+.ldot{width:5px;height:5px;border-radius:50%;background:var(--live);flex-shrink:0;animation:blink 1.2s step-start infinite}
+@keyframes blink{50%{opacity:0}}
+/* filter pills */
+.fpbar{display:flex;gap:.3rem;margin-left:auto;overflow-x:auto;padding-bottom:1px}
+.fpbar::-webkit-scrollbar{display:none}
+.fp{font-family:var(--mono);font-size:.58rem;letter-spacing:.09em;background:transparent;
+  border:1px solid var(--border);color:#3c3660;padding:.25rem .65rem;border-radius:20px;
+  cursor:pointer;white-space:nowrap;transition:all .2s;text-transform:uppercase}
+.fp:hover{color:var(--gold);border-color:var(--gold3)}
+.fp.active{background:rgba(201,168,76,.1);border-color:var(--gold);color:var(--gold2)}
+.fp.flive.active{background:rgba(255,58,58,.12);border-color:#6e1e1e;color:var(--live2)}
+.fp.fp-twitch.active{background:rgba(145,71,255,.12);border-color:#3d1e8a;color:#c4a0ff}
+.fp.fp-kick.active{background:rgba(83,252,24,.08);border-color:#2a6010;color:#80ff40}
+.fp.fp-police.active{background:rgba(96,165,250,.1);border-color:var(--police-b);color:var(--police-c)}
+.fp.fp-criminal.active{background:rgba(248,113,113,.1);border-color:var(--criminal-b);color:var(--criminal-c)}
+.fp.fp-medic.active{background:rgba(74,222,128,.1);border-color:var(--medic-b);color:var(--medic-c)}
+.fp.fp-mechanic.active{background:rgba(167,139,250,.1);border-color:var(--mechanic-b);color:var(--mechanic-c)}
+.fp.fp-governo.active{background:rgba(251,146,60,.1);border-color:var(--governo-b);color:var(--governo-c)}
+.hdr-btns{display:flex;gap:.4rem;flex-shrink:0}
+.hbtn{font-family:var(--head);font-size:.62rem;font-weight:600;letter-spacing:.1em;background:transparent;
+  border:1px solid var(--border2);color:var(--gold3);padding:.28rem .75rem;border-radius:var(--rs);
+  cursor:pointer;transition:all .2s;text-transform:uppercase;white-space:nowrap}
+.hbtn:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,.05)}
+/* notification bell */
+.notif-btn{position:relative;font-size:1rem;background:transparent;border:1px solid var(--border);
+  color:var(--muted,#5a5070);width:32px;height:32px;border-radius:var(--rs);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.notif-btn:hover{border-color:var(--gold);color:var(--gold)}
+.notif-badge{position:absolute;top:-4px;right:-4px;width:14px;height:14px;border-radius:50%;
+  background:var(--live);font-family:var(--mono);font-size:.5rem;color:#fff;
+  display:flex;align-items:center;justify-content:center;display:none}
+.notif-badge.show{display:flex}
+
+/* ════════════════════════════════════
+   PAGES
+════════════════════════════════════ */
+.page{display:none;position:relative;z-index:1;min-height:calc(100vh - 58px)}
+.page.active{display:block}
+
+/* ════════════════════════════════════
+   HOME PAGE
+════════════════════════════════════ */
+.home-layout{display:grid;grid-template-columns:1fr 300px;min-height:calc(100vh - 58px)}
+/* hero */
+.hero{grid-column:1/-1;position:relative;overflow:hidden;padding:2.5rem 2rem 1.8rem;
+  text-align:center;border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,rgba(201,168,76,.055) 0%,transparent 100%)}
+.hero::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 90% at 50% 0%,rgba(201,168,76,.05) 0%,transparent 70%);pointer-events:none}
+.hero-wings{position:absolute;top:0;left:50%;transform:translateX(-50%);font-size:7rem;opacity:.04;
+  pointer-events:none;animation:wp 6s ease-in-out infinite}
+@keyframes wp{0%,100%{opacity:.04;transform:translateX(-50%) scale(1)}50%{opacity:.065;transform:translateX(-50%) scale(1.04)}}
+.hero-ey{font-family:var(--mono);font-size:.57rem;letter-spacing:.45em;color:var(--gold3);text-transform:uppercase;margin-bottom:.6rem}
+.hero-title{font-family:var(--head);font-weight:900;letter-spacing:.14em;font-size:clamp(1.6rem,4vw,2.8rem);
+  background:linear-gradient(155deg,var(--gold2) 0%,var(--gold) 45%,#e8c060 70%,var(--cream) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;margin-bottom:.3rem}
+.hero-sub{font-family:var(--body);font-style:italic;font-size:.95rem;color:#5a5070;margin-bottom:1rem}
+.hstats{display:flex;justify-content:center;gap:2rem;font-family:var(--mono)}
+.hstat{text-align:center}
+.hstat-n{font-size:1.4rem;font-weight:600;color:var(--gold2);text-shadow:0 0 18px rgba(201,168,76,.4);display:block}
+.hstat-n.red{color:var(--live2);text-shadow:0 0 18px rgba(255,58,58,.4)}
+.hstat-l{font-size:.54rem;color:var(--gold3);letter-spacing:.18em;text-transform:uppercase}
+/* main grid area */
+.home-main{padding:1.4rem 1.4rem 4rem;overflow-y:auto}
+.sec-lbl{display:flex;align-items:center;gap:.7rem;margin-bottom:1.1rem;
+  font-family:var(--head);font-size:.64rem;letter-spacing:.23em;color:var(--gold3);text-transform:uppercase}
+.sec-lbl::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+/* SOD banner */
+.sod{position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#100820,#18102a,#0e0818);
+  border:1px solid #3a2060;border-radius:var(--r);padding:1.1rem 1.3rem;
+  margin-bottom:1.4rem;display:flex;align-items:center;gap:1.1rem;cursor:pointer;
+  box-shadow:0 8px 28px rgba(0,0,0,.5),0 0 30px rgba(139,47,201,.08);transition:border-color .2s}
+.sod:hover{border-color:#6a30a0}
+.sod-crown{font-size:2rem;flex-shrink:0;filter:drop-shadow(0 0 10px rgba(201,168,76,.7));animation:cs 5s ease-in-out infinite}
+@keyframes cs{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg) translateY(-3px)}}
+.sod-info{flex:1;min-width:0}
+.sod-lbl{font-family:var(--mono);font-size:.55rem;letter-spacing:.28em;color:#7a50a0;text-transform:uppercase;margin-bottom:.15rem}
+.sod-name{font-family:var(--head);font-size:1rem;font-weight:700;letter-spacing:.07em;color:var(--gold2)}
+.sod-char{font-family:var(--body);font-style:italic;font-size:.85rem;color:#a070c0;margin-top:.1rem}
+.sod-msg{font-size:.78rem;color:#6a6080;margin-top:.2rem}
+/* grid */
+.live-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1rem;margin-bottom:1.8rem}
+.all-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:.85rem}
+.empty-st{grid-column:1/-1;text-align:center;padding:4rem 1rem;color:#2e2a4a;
+  font-family:var(--mono);font-size:.75rem;line-height:2}
+.empty-ico{font-size:2.8rem;display:block;margin-bottom:.5rem;opacity:.25}
+
+/* ── CARD ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  overflow:hidden;cursor:pointer;position:relative;
+  transition:transform .3s cubic-bezier(.2,.8,.3,1),border-color .3s,box-shadow .3s;
+  animation:cIn .4s ease both}
+@keyframes cIn{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+.card[data-cat=police]  {--cc:var(--police-c);  --cbg:var(--police-bg);  --cb:var(--police-b)}
+.card[data-cat=criminal]{--cc:var(--criminal-c);--cbg:var(--criminal-bg);--cb:var(--criminal-b)}
+.card[data-cat=medic]   {--cc:var(--medic-c);   --cbg:var(--medic-bg);   --cb:var(--medic-b)}
+.card[data-cat=civilian]{--cc:var(--civilian-c);--cbg:var(--civilian-bg);--cb:var(--civilian-b)}
+.card[data-cat=mechanic]{--cc:var(--mechanic-c);--cbg:var(--mechanic-bg);--cb:var(--mechanic-b)}
+.card[data-cat=governo] {--cc:var(--governo-c); --cbg:var(--governo-bg); --cb:var(--governo-b)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--cc,var(--gold)),transparent);
+  opacity:0;transition:opacity .3s}
+.card:hover::before{opacity:1}
+.card:hover{transform:translateY(-5px) scale(1.01);border-color:var(--cb,var(--border2));
+  box-shadow:0 14px 40px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.025),
+             0 4px 20px color-mix(in srgb,var(--cc,var(--gold)) 18%,transparent)}
+.card.is-live{border-color:color-mix(in srgb,var(--live) 28%,var(--border))}
+.card.is-partner .cname::after{content:' ✦';color:var(--gold2);font-size:.8em;text-shadow:0 0 8px rgba(201,168,76,.7)}
+/* thumb */
+.cthumb{position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--cbg,#0a0818)}
+.cthumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s,opacity .3s;opacity:.72}
+.card:hover .cthumb img{transform:scale(1.07);opacity:.9}
+.cthumb-fb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--head);font-weight:900;font-size:2.8rem;letter-spacing:.05em;user-select:none}
+.cthumb::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(to top,rgba(14,12,28,.97) 0%,rgba(14,12,28,.3) 40%,transparent 68%)}
+/* card badges */
+.b-live{position:absolute;top:7px;left:7px;z-index:2;background:var(--live);color:#fff;
+  font-family:var(--mono);font-size:.56rem;font-weight:600;padding:.2rem .55rem;border-radius:3px;
+  display:flex;align-items:center;gap:.35rem;letter-spacing:.1em;
+  animation:lg 2s ease-in-out infinite}
+@keyframes lg{0%,100%{box-shadow:0 0 8px rgba(255,58,58,.5)}50%{box-shadow:0 0 18px rgba(255,58,58,.9)}}
+.b-live::before{content:'';width:5px;height:5px;border-radius:50%;background:#fff;animation:blink 1.2s step-start infinite}
+.b-off{position:absolute;top:7px;left:7px;z-index:2;background:rgba(0,0,0,.5);
+  border:1px solid rgba(255,255,255,.07);color:#3c3660;font-family:var(--mono);font-size:.53rem;
+  padding:.18rem .5rem;border-radius:3px;letter-spacing:.1em}
+.b-partner{position:absolute;top:7px;right:7px;z-index:2;
+  background:linear-gradient(135deg,var(--gold3),var(--gold));color:#040308;
+  font-family:var(--mono);font-size:.52rem;font-weight:700;padding:.18rem .48rem;border-radius:3px;letter-spacing:.08em}
+.b-feat{position:absolute;top:7px;right:7px;z-index:2;
+  background:linear-gradient(135deg,#3a006a,#8b2fc9);color:#e8c0ff;
+  font-family:var(--mono);font-size:.52rem;font-weight:700;padding:.18rem .48rem;border-radius:3px;letter-spacing:.08em;
+  animation:fg 3s ease-in-out infinite}
+@keyframes fg{0%,100%{box-shadow:0 0 6px rgba(139,47,201,.4)}50%{box-shadow:0 0 14px rgba(139,47,201,.8)}}
+.pdots{position:absolute;bottom:7px;right:7px;z-index:2;display:flex;gap:.28rem}
+.pdot{width:19px;height:19px;border-radius:4px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:.52rem;font-weight:700;color:#fff}
+.pdot.twitch{background:var(--twitch)}.pdot.kick{background:var(--kick);color:#0a0c00}.pdot.youtube{background:var(--youtube)}
+/* card body */
+.cbody{padding:.8rem .95rem .95rem}
+.cname{font-family:var(--head);font-size:.9rem;font-weight:700;letter-spacing:.05em;color:var(--cream);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.char-tabs{display:flex;gap:.25rem;margin-top:.5rem;flex-wrap:wrap}
+.chtab{font-family:var(--mono);font-size:.57rem;letter-spacing:.05em;padding:.2rem .55rem;
+  border-radius:20px;border:1px solid var(--border);cursor:pointer;transition:all .2s;
+  white-space:nowrap;background:var(--surface);color:#3c3660;position:relative}
+.chtab.active{background:color-mix(in srgb,var(--cc,var(--gold)) 12%,transparent);
+  border-color:var(--cb,var(--gold3));color:var(--cc,var(--gold))}
+.chtab .lr{width:5px;height:5px;border-radius:50%;background:var(--live);
+  position:absolute;top:-2px;right:-2px;animation:blink 1.2s step-start infinite}
+.char-disp{font-family:var(--body);font-style:italic;font-size:.85rem;
+  color:color-mix(in srgb,var(--cc,var(--gold)) 80%,#888);margin-top:.28rem;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:1.1em}
+.cstats{display:flex;align-items:center;gap:.7rem;font-family:var(--mono);font-size:.58rem;color:#3c3660;margin-top:.28rem}
+.ctag{display:inline-block;font-family:var(--mono);font-size:.55rem;letter-spacing:.1em;
+  padding:.1rem .45rem;border-radius:3px;text-transform:uppercase;
+  background:color-mix(in srgb,var(--cc,var(--gold)) 8%,transparent);
+  color:var(--cc,var(--gold));
+  border:1px solid color-mix(in srgb,var(--cc,var(--gold)) 22%,transparent)}
+.card-links{display:flex;gap:.4rem;margin-top:.75rem}
+.lbtn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:.3rem;padding:.4rem;
+  border-radius:var(--rs);font-family:var(--head);font-size:.65rem;font-weight:600;letter-spacing:.07em;
+  text-decoration:none;border:none;cursor:pointer;transition:opacity .2s,transform .15s}
+.lbtn:hover{opacity:.82;transform:scale(.97)}
+.lbtn.twitch{background:var(--twitch);color:#fff}.lbtn.kick{background:var(--kick);color:#0a0c00}.lbtn.youtube{background:var(--youtube);color:#fff}
+.profile-btn{width:100%;margin-top:.6rem;padding:.38rem;background:rgba(201,168,76,.07);
+  border:1px solid var(--gold4);color:var(--gold3);border-radius:var(--rs);
+  font-family:var(--head);font-size:.62rem;letter-spacing:.1em;cursor:pointer;transition:all .2s}
+.profile-btn:hover{background:rgba(201,168,76,.12);border-color:var(--gold3);color:var(--gold)}
+
+/* ── HOME SIDEBAR ── */
+.home-sidebar{border-left:1px solid var(--border);padding:1.2rem .9rem;overflow-y:auto;display:flex;flex-direction:column;gap:1rem}
+.home-sidebar::-webkit-scrollbar{width:3px}
+.widget{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.whead{padding:.65rem .95rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(90deg,rgba(201,168,76,.04),transparent)}
+.wtitle{font-family:var(--head);font-size:.62rem;letter-spacing:.17em;color:var(--gold3);text-transform:uppercase;display:flex;align-items:center;gap:.45rem}
+.wbody{padding:.7rem .95rem}
+/* ranking */
+.rank-item{padding:.55rem 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.7rem;cursor:pointer;transition:background .15s}
+.rank-item:last-child{border-bottom:none;padding-bottom:0}
+.rank-item:hover{background:rgba(201,168,76,.03)}
+.rank-num{font-family:var(--head);font-size:.72rem;font-weight:700;color:var(--gold3);width:18px;text-align:center;flex-shrink:0}
+.rank-num.gold{color:var(--gold2);text-shadow:0 0 8px rgba(201,168,76,.5)}
+.rank-num.silver{color:#c0c0c0}.rank-num.bronze{color:#cd7f32}
+.rank-info{flex:1;min-width:0}
+.rank-name{font-family:var(--head);font-size:.75rem;letter-spacing:.04em;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank-detail{font-family:var(--mono);font-size:.57rem;color:#4a4060;margin-top:.1rem}
+.rank-score{font-family:var(--mono);font-size:.65rem;color:var(--gold3);flex-shrink:0}
+/* news / events sidebar same as before */
+.news-item{padding:.55rem 0;border-bottom:1px solid var(--border);display:flex;gap:.6rem;align-items:flex-start}
+.news-item:last-child{border-bottom:none;padding-bottom:0}
+.ndot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:.4rem}
+.ndot.alert{background:var(--live);animation:blink 1.5s step-start infinite}
+.ndot.event{background:var(--gold)}.ndot.update{background:var(--medic-c)}.ndot.info{background:var(--police-c)}
+.ntext{font-size:.78rem;color:#7a7090;line-height:1.4}
+.ntext strong{color:var(--cream)}
+.ntime{font-family:var(--mono);font-size:.55rem;color:#2e2a4a;margin-top:.15rem}
+.ev-item{padding:.55rem .8rem;border-radius:var(--rs);margin-bottom:.45rem;border:1px solid var(--border);background:var(--surface2);transition:border-color .2s}
+.ev-item:hover{border-color:var(--gold3)}.ev-item:last-child{margin-bottom:0}
+.ev-title{font-family:var(--head);font-size:.7rem;letter-spacing:.05em;color:var(--cream)}
+.ev-meta{font-family:var(--mono);font-size:.56rem;color:var(--gold3);margin-top:.2rem}
+.ev-desc{font-size:.75rem;color:#5a5070;margin-top:.18rem;line-height:1.4}
+.ebadge{display:inline-block;font-family:var(--mono);font-size:.5rem;letter-spacing:.08em;
+  padding:.08rem .4rem;border-radius:2px;text-transform:uppercase;margin-left:.35rem;
+  background:rgba(255,58,58,.12);color:var(--live);border:1px solid rgba(255,58,58,.2)}
+.ebadge.up{background:rgba(201,168,76,.1);color:var(--gold);border-color:rgba(201,168,76,.2)}
+/* notice */
+.notice-item{padding:.6rem .8rem;border-radius:var(--rs);margin-bottom:.4rem;
+  border-left:3px solid var(--gold3);background:rgba(201,168,76,.03)}
+.notice-item:last-child{margin-bottom:0}
+.ni-name{font-family:var(--head);font-size:.67rem;letter-spacing:.06em;color:var(--gold2)}
+.ni-text{font-size:.78rem;color:#7a7090;margin-top:.18rem;line-height:1.4}
+.ni-time{font-family:var(--mono);font-size:.53rem;color:#2e2a4a;margin-top:.18rem}
+
+/* ════════════════════════════════════
+   STREAMER PROFILE PAGE
+════════════════════════════════════ */
+#page-profile{background:var(--bg)}
+.profile-hero{position:relative;overflow:hidden;min-height:220px}
+.profile-banner{width:100%;height:220px;object-fit:cover;display:block;filter:brightness(.45) saturate(1.2)}
+.profile-banner-fallback{width:100%;height:220px;display:block}
+.profile-overlay{position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(4,3,10,1) 0%,rgba(4,3,10,.4) 40%,rgba(4,3,10,.1) 100%)}
+.profile-info{position:absolute;bottom:1.2rem;left:1.5rem;right:1.5rem;display:flex;align-items:flex-end;gap:1.2rem}
+.profile-avatar{width:80px;height:80px;border-radius:50%;border:3px solid var(--gold3);
+  object-fit:cover;flex-shrink:0;background:var(--surface);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--head);font-weight:900;font-size:1.8rem;color:var(--gold3);overflow:hidden}
+.profile-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.profile-meta{flex:1;min-width:0}
+.profile-name{font-family:var(--head);font-size:1.5rem;font-weight:900;letter-spacing:.1em;
+  background:linear-gradient(135deg,var(--gold2),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.profile-badges{display:flex;gap:.4rem;margin-top:.35rem;flex-wrap:wrap}
+.pbadge{font-family:var(--mono);font-size:.58rem;letter-spacing:.1em;padding:.2rem .6rem;
+  border-radius:3px;text-transform:uppercase;border:1px solid transparent}
+.pbadge.partner{background:linear-gradient(135deg,var(--gold4),var(--gold3));color:var(--gold2)}
+.pbadge.live{background:rgba(255,58,58,.15);border-color:#6e1e1e;color:var(--live2);animation:lg 2s ease-in-out infinite}
+.pbadge.featured{background:rgba(139,47,201,.15);border-color:#5a1fa0;color:#c090ff}
+.profile-stats-row{display:flex;gap:1.5rem;margin-top:.5rem;font-family:var(--mono)}
+.pstat{text-align:center}
+.pstat-n{font-size:1.1rem;font-weight:600;color:var(--gold2);display:block}
+.pstat-l{font-size:.52rem;color:var(--gold3);letter-spacing:.15em;text-transform:uppercase}
+/* profile body */
+.profile-body{display:grid;grid-template-columns:1fr 280px;gap:1.2rem;padding:1.2rem 1.5rem 4rem;max-width:1400px;margin:0 auto}
+.profile-left{display:flex;flex-direction:column;gap:1.1rem}
+.profile-right{display:flex;flex-direction:column;gap:1rem}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.panel-head{padding:.7rem 1rem;border-bottom:1px solid var(--border);
+  font-family:var(--head);font-size:.68rem;letter-spacing:.18em;color:var(--gold3);text-transform:uppercase;
+  background:linear-gradient(90deg,rgba(201,168,76,.04),transparent);
+  display:flex;align-items:center;justify-content:space-between}
+.panel-body{padding:.85rem 1rem}
+/* chars grid */
+.chars-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.8rem}
+.char-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);
+  padding:.75rem .85rem;position:relative;transition:border-color .2s,box-shadow .2s;cursor:pointer}
+.char-card[data-cat=police]  {--cc:var(--police-c);--cb:var(--police-b)}
+.char-card[data-cat=criminal]{--cc:var(--criminal-c);--cb:var(--criminal-b)}
+.char-card[data-cat=medic]   {--cc:var(--medic-c);--cb:var(--medic-b)}
+.char-card[data-cat=civilian]{--cc:var(--civilian-c);--cb:var(--civilian-b)}
+.char-card[data-cat=mechanic]{--cc:var(--mechanic-c);--cb:var(--mechanic-b)}
+.char-card[data-cat=governo] {--cc:var(--governo-c);--cb:var(--governo-b)}
+.char-card:hover{border-color:var(--cb,var(--gold3));box-shadow:0 4px 16px rgba(0,0,0,.4)}
+.char-card.is-live{border-color:color-mix(in srgb,var(--live) 40%,var(--border))}
+.cc-name{font-family:var(--head);font-size:.78rem;letter-spacing:.05em;color:var(--cream);margin-bottom:.3rem}
+.cc-cat{font-size:.7rem;font-style:italic;color:var(--cc,var(--gold))}
+.cc-stats{font-family:var(--mono);font-size:.58rem;color:#4a4060;margin-top:.35rem;display:flex;gap:.7rem}
+.cc-live-indicator{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;
+  background:#2a2040;transition:background .3s}
+.cc-live-indicator.on{background:var(--live);box-shadow:0 0 6px var(--live);animation:blink 1.5s step-start infinite}
+/* plat links */
+.plat-links{display:flex;flex-wrap:wrap;gap:.5rem}
+.plat-link-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.42rem .8rem;
+  border-radius:var(--rs);font-family:var(--head);font-size:.7rem;font-weight:600;letter-spacing:.06em;
+  text-decoration:none;border:none;cursor:pointer;transition:opacity .2s,transform .15s}
+.plat-link-btn:hover{opacity:.82;transform:scale(.97)}
+.plat-link-btn.twitch{background:var(--twitch);color:#fff}
+.plat-link-btn.kick{background:var(--kick);color:#0a0c00}
+.plat-link-btn.youtube{background:var(--youtube);color:#fff}
+.plat-link-btn.discord{background:var(--discord);color:#fff}
+.plat-link-btn.instagram{background:linear-gradient(45deg,#405de6,#5851db,#833ab4,#c13584,#e1306c,#fd1d1d);color:#fff}
+.plat-link-btn.twitter{background:var(--twitter);color:#fff}
+/* live embed area */
+.embed-grid{display:grid;gap:.7rem}
+.embed-grid.cols-1{grid-template-columns:1fr}
+.embed-grid.cols-2{grid-template-columns:1fr 1fr}
+.embed-wrap{position:relative;aspect-ratio:16/9;background:#000;border-radius:var(--rs);overflow:hidden}
+.embed-wrap iframe{width:100%;height:100%;border:none;display:block}
+.embed-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;
+  background:var(--surface2);color:#3c3660;font-family:var(--mono);font-size:.75rem}
+.embed-placeholder span{font-size:2rem;opacity:.3}
+/* profile events */
+.prv-event{padding:.6rem .8rem;border-radius:var(--rs);margin-bottom:.45rem;
+  background:linear-gradient(135deg,rgba(201,168,76,.04),transparent);
+  border:1px solid var(--border2);transition:border-color .2s}
+.prv-event:hover{border-color:var(--gold3)}
+.prv-event:last-child{margin-bottom:0}
+.prv-ev-title{font-family:var(--head);font-size:.75rem;letter-spacing:.04em;color:var(--cream)}
+.prv-ev-desc{font-size:.78rem;color:#6a6080;margin-top:.18rem;line-height:1.4}
+.prv-ev-time{font-family:var(--mono);font-size:.55rem;color:var(--gold3);margin-top:.2rem}
+/* live history */
+.lh-item{padding:.5rem 0;border-bottom:1px solid var(--border);display:flex;gap:.7rem}
+.lh-item:last-child{border-bottom:none;padding-bottom:0}
+.lh-cat-ico{font-size:.95rem;flex-shrink:0;margin-top:.1rem}
+.lh-info{flex:1;min-width:0}
+.lh-char{font-family:var(--head);font-size:.72rem;letter-spacing:.04em;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lh-meta{font-family:var(--mono);font-size:.57rem;color:#4a4060;margin-top:.12rem}
+/* social row */
+.social-row{display:flex;flex-wrap:wrap;gap:.5rem}
+.soc-btn{display:inline-flex;align-items:center;gap:.35rem;padding:.38rem .75rem;border-radius:var(--rs);
+  font-family:var(--head);font-size:.65rem;font-weight:600;letter-spacing:.06em;
+  text-decoration:none;border:1px solid var(--border);color:#5a5070;cursor:pointer;transition:all .2s;background:transparent}
+.soc-btn:hover{opacity:.85;transform:scale(.97)}
+.soc-btn.discord{border-color:#3d4a9a;color:#a0acff;background:rgba(88,101,242,.1)}
+.soc-btn.instagram{border-color:#8b2060;color:#ff80b0;background:rgba(225,48,108,.08)}
+.soc-btn.twitter{border-color:#1a6080;color:#70d0ff;background:rgba(29,161,242,.08)}
+/* access counter */
+.access-box{text-align:center;padding:1rem;background:linear-gradient(135deg,rgba(201,168,76,.04),transparent);border-radius:var(--rs)}
+.access-num{font-family:var(--head);font-size:2rem;font-weight:700;color:var(--gold2);
+  text-shadow:0 0 18px rgba(201,168,76,.4)}
+.access-lbl{font-family:var(--mono);font-size:.58rem;color:var(--gold3);letter-spacing:.2em;text-transform:uppercase;margin-top:.3rem}
+/* custom theme preview */
+.profile-custom-border{border-color:var(--profile-accent,var(--gold3))}
+
+/* ════════════════════════════════════
+   MULTI-LIVE PAGE
+════════════════════════════════════ */
+#page-multilive{padding:1.2rem 1.5rem 4rem}
+.ml-controls{display:flex;gap:.6rem;align-items:center;margin-bottom:1.2rem;flex-wrap:wrap}
+.ml-sel{font-family:var(--body);font-size:.88rem;color:var(--cream);background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--rs);padding:.45rem .8rem;outline:none;cursor:pointer;
+  transition:border-color .2s}
+.ml-sel:focus{border-color:var(--gold)}
+.ml-sel option{background:#0d0b1a}
+.ml-embeds{display:grid;gap:.8rem}
+.ml-embeds.c1{grid-template-columns:1fr}
+.ml-embeds.c2{grid-template-columns:1fr 1fr}
+.ml-embeds.c3{grid-template-columns:1fr 1fr 1fr}
+.ml-embeds.c4{grid-template-columns:1fr 1fr}
+.ml-slot{position:relative;aspect-ratio:16/9;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.ml-slot iframe{width:100%;height:100%;border:none}
+.ml-slot-empty{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;
+  color:#3c3660;font-family:var(--mono);font-size:.72rem}
+.ml-slot-label{position:absolute;top:0;left:0;right:0;
+  background:linear-gradient(to bottom,rgba(0,0,0,.7),transparent);
+  padding:.5rem .7rem;font-family:var(--head);font-size:.65rem;letter-spacing:.08em;color:var(--cream);
+  display:flex;align-items:center;justify-content:space-between}
+.ml-remove{background:rgba(255,58,58,.2);border:none;color:var(--live2);border-radius:3px;
+  padding:.15rem .4rem;font-size:.6rem;cursor:pointer;transition:background .2s}
+.ml-remove:hover{background:rgba(255,58,58,.4)}
+
+/* ════════════════════════════════════
+   DASHBOARD PAGE
+════════════════════════════════════ */
+#page-dashboard{padding:1.4rem 1.5rem 4rem}
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-bottom:1.8rem}
+.dash-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem 1.2rem;position:relative;overflow:hidden;transition:border-color .2s}
+.dash-card:hover{border-color:var(--gold3)}
+.dash-card::before{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--dc,var(--gold3)),transparent);opacity:.6}
+.dash-card[data-dc=live]{--dc:var(--live)}.dash-card[data-dc=gold]{--dc:var(--gold)}.dash-card[data-dc=blue]{--dc:var(--police-c)}.dash-card[data-dc=green]{--dc:var(--medic-c)}.dash-card[data-dc=purple]{--dc:var(--mechanic-c)}
+.dc-icon{font-size:1.5rem;margin-bottom:.5rem;display:block}
+.dc-val{font-family:var(--head);font-size:1.8rem;font-weight:700;color:var(--cream);line-height:1}
+.dc-lbl{font-family:var(--mono);font-size:.6rem;color:#5a5070;letter-spacing:.15em;text-transform:uppercase;margin-top:.3rem}
+.dc-trend{font-family:var(--mono);font-size:.6rem;margin-top:.4rem}
+.dc-trend.up{color:var(--medic-c)}.dc-trend.down{color:var(--live)}
+/* charts placeholder */
+.chart-area{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.2rem;margin-bottom:1.2rem}
+.chart-title{font-family:var(--head);font-size:.7rem;letter-spacing:.15em;color:var(--gold3);text-transform:uppercase;margin-bottom:1rem}
+.bar-chart{display:flex;align-items:flex-end;gap:.4rem;height:100px}
+.bar{flex:1;background:linear-gradient(to top,var(--gold3),rgba(201,168,76,.3));border-radius:3px 3px 0 0;
+  min-width:0;transition:height .5s ease;position:relative;cursor:pointer}
+.bar:hover{filter:brightness(1.2)}
+.bar-tooltip{position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);
+  background:#0a0818;border:1px solid var(--border2);border-radius:3px;
+  padding:.2rem .5rem;font-family:var(--mono);font-size:.6rem;color:var(--gold2);
+  white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .2s}
+.bar:hover .bar-tooltip{opacity:1}
+.bar-labels{display:flex;gap:.4rem;margin-top:.4rem}
+.bl{flex:1;text-align:center;font-family:var(--mono);font-size:.55rem;color:#4a4060;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top-streamers-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.top-streamers-table th{font-family:var(--head);font-size:.6rem;letter-spacing:.15em;color:var(--gold3);text-transform:uppercase;text-align:left;padding:.5rem .7rem;border-bottom:1px solid var(--border)}
+.top-streamers-table td{padding:.55rem .7rem;border-bottom:1px solid var(--border);color:#8a8098}
+.top-streamers-table tr:last-child td{border-bottom:none}
+.top-streamers-table tr:hover td{background:rgba(201,168,76,.03)}
+
+/* ════════════════════════════════════
+   CHAT (sidebar widget style)
+════════════════════════════════════ */
+.chat-box{display:flex;flex-direction:column;height:320px}
+.chat-messages{flex:1;overflow-y:auto;padding:.5rem .7rem;display:flex;flex-direction:column;gap:.35rem}
+.chat-messages::-webkit-scrollbar{width:3px}
+.chat-msg{padding:.35rem .6rem;border-radius:var(--rs);background:var(--surface2);font-size:.8rem;line-height:1.4;animation:cIn .2s ease}
+.chat-msg .cm-name{font-family:var(--head);font-size:.65rem;letter-spacing:.04em;margin-right:.4rem}
+.chat-msg .cm-name.mod{color:#fbbf24}.chat-msg .cm-name.user{color:var(--police-c)}.chat-msg .cm-name.streamer{color:var(--gold2)}
+.chat-msg .cm-text{color:#8a8098}
+.chat-msg.system{background:rgba(201,168,76,.04);border-left:2px solid var(--gold3)}
+.chat-msg.system .cm-text{color:var(--gold3);font-style:italic;font-size:.75rem}
+.chat-input-row{display:flex;gap:.4rem;padding:.6rem .7rem;border-top:1px solid var(--border)}
+.chat-input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);
+  color:var(--cream);font-family:var(--body);font-size:.85rem;padding:.4rem .7rem;outline:none;transition:border-color .2s}
+.chat-input:focus{border-color:var(--gold)}
+.chat-input::placeholder{color:#2e2a4a;font-size:.78rem}
+.chat-send{background:rgba(201,168,76,.1);border:1px solid var(--gold4);color:var(--gold3);
+  border-radius:var(--rs);padding:.4rem .7rem;font-family:var(--head);font-size:.65rem;
+  cursor:pointer;transition:all .2s;white-space:nowrap}
+.chat-send:hover{background:rgba(201,168,76,.18);color:var(--gold)}
+.chat-username{font-family:var(--mono);font-size:.65rem;color:#4a4060;padding:.3rem .7rem;border-bottom:1px solid var(--border)}
+.chat-username input{background:transparent;border:none;color:var(--cream);font-family:var(--mono);font-size:.65rem;outline:none;width:120px}
+.chat-username input::placeholder{color:#3a3260}
+
+/* ════════════════════════════════════
+   NOTIFICATIONS PANEL
+════════════════════════════════════ */
+.notif-panel{position:fixed;top:62px;right:1rem;width:300px;background:#0d0b1a;
+  border:1px solid var(--border2);border-radius:var(--r);z-index:450;
+  box-shadow:0 16px 48px rgba(0,0,0,.7);display:none;overflow:hidden}
+.notif-panel.open{display:block;animation:cIn .2s ease}
+.notif-phead{padding:.65rem 1rem;border-bottom:1px solid var(--border);
+  font-family:var(--head);font-size:.65rem;letter-spacing:.15em;color:var(--gold3);text-transform:uppercase;
+  display:flex;justify-content:space-between;align-items:center}
+.notif-list{max-height:280px;overflow-y:auto}
+.notif-item{padding:.65rem 1rem;border-bottom:1px solid var(--border);display:flex;gap:.6rem;
+  align-items:flex-start;cursor:pointer;transition:background .15s}
+.notif-item:hover{background:rgba(201,168,76,.04)}
+.notif-item:last-child{border-bottom:none}
+.notif-item.unread{background:rgba(255,58,58,.04)}
+.ni-ico{font-size:1rem;flex-shrink:0;margin-top:.1rem}
+.ni-txt{font-size:.78rem;color:#7a7090;line-height:1.4}
+.ni-txt strong{color:var(--cream)}
+.ni-t{font-family:var(--mono);font-size:.55rem;color:#2e2a4a;margin-top:.15rem}
+.notif-empty{padding:1.5rem 1rem;text-align:center;color:#3a3260;font-family:var(--mono);font-size:.72rem}
+.notif-clear{padding:.5rem 1rem;text-align:center;border-top:1px solid var(--border);
+  font-family:var(--mono);font-size:.62rem;color:#4a4060;cursor:pointer;transition:color .2s}
+.notif-clear:hover{color:var(--live2)}
+/* subscribe toggle */
+.sub-row{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem;border-top:1px solid var(--border)}
+.sub-lbl{font-family:var(--mono);font-size:.62rem;color:#5a5070;letter-spacing:.08em}
+.sub-toggle{font-family:var(--head);font-size:.6rem;padding:.22rem .6rem;border-radius:3px;cursor:pointer;
+  border:1px solid var(--border2);color:var(--gold3);background:transparent;transition:all .2s}
+.sub-toggle.on{background:rgba(201,168,76,.1);border-color:var(--gold3);color:var(--gold2)}
+
+/* ════════════════════════════════════
+   ADMIN PANEL (overlay sidebar)
+════════════════════════════════════ */
+.backdrop{position:fixed;inset:0;z-index:699;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);display:none}
+.backdrop.open{display:block}
+.admin-panel{position:fixed;top:0;right:0;bottom:0;z-index:700;width:480px;max-width:96vw;
+  background:#06050e;border-left:1px solid var(--border2);
+  display:flex;flex-direction:column;transform:translateX(110%);
+  transition:transform .38s cubic-bezier(.2,.8,.3,1);box-shadow:-20px 0 80px rgba(0,0,0,.7)}
+.admin-panel.open{transform:translateX(0)}
+.ap-head{padding:1.1rem 1.3rem;border-bottom:1px solid var(--border);
+  background:linear-gradient(90deg,rgba(201,168,76,.05),transparent);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.ap-head h2{font-family:var(--head);font-size:.88rem;letter-spacing:.14em;color:var(--gold2)}
+.xbtn{background:transparent;border:1px solid var(--border);color:#5a5070;
+  width:30px;height:30px;border-radius:var(--rs);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:1rem}
+.xbtn:hover{border-color:var(--gold);color:var(--gold)}
+.ap-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;overflow-x:auto}
+.ap-tabs::-webkit-scrollbar{display:none}
+.aptab{flex-shrink:0;padding:.62rem .9rem;font-family:var(--head);font-size:.62rem;
+  letter-spacing:.1em;color:#3c3660;cursor:pointer;border-bottom:2px solid transparent;
+  transition:all .2s;text-transform:uppercase;white-space:nowrap}
+.aptab.active{color:var(--gold2);border-bottom-color:var(--gold)}
+.ap-body{flex:1;overflow-y:auto;padding:1.1rem 1.3rem}
+.ap-body::-webkit-scrollbar{width:3px}
+/* forms */
+.fsec{margin-bottom:1.5rem}
+.fstitle{font-family:var(--head);font-size:.62rem;letter-spacing:.2em;color:var(--gold3);text-transform:uppercase;
+  margin-bottom:.7rem;padding-bottom:.35rem;border-bottom:1px solid var(--border)}
+.fg{margin-bottom:.75rem}
+.fg label{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:#4a4060;text-transform:uppercase;margin-bottom:.3rem}
+.fg input,.fg select,.fg textarea{width:100%;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--rs);color:var(--cream);font-family:var(--body);font-size:.88rem;
+  padding:.48rem .8rem;outline:none;transition:border-color .2s,box-shadow .2s}
+.fg textarea{resize:vertical;min-height:65px;font-size:.84rem;line-height:1.5}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.07)}
+.fg select option{background:#0a0818}
+.frow{display:flex;gap:.6rem}
+.frow .fg{flex:1;min-width:0}
+/* toggle switch */
+.tsrow{display:flex;align-items:center;justify-content:space-between;padding:.45rem .75rem;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:.5rem;cursor:pointer;transition:border-color .2s}
+.tsrow:hover{border-color:var(--gold3)}
+.tslbl{font-size:.85rem;display:flex;align-items:center;gap:.5rem}
+.tsw{width:34px;height:18px;background:var(--border);border-radius:18px;position:relative;transition:background .2s;flex-shrink:0}
+.tsw::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.tsw.on{background:var(--gold3)}.tsw.on::after{transform:translateX(16px)}
+.tsw.live.on{background:var(--live)}
+/* char rows in admin */
+.crows{display:flex;flex-direction:column;gap:.45rem}
+.crow{background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);
+  padding:.55rem .8rem;display:flex;align-items:center;gap:.6rem}
+.crow-info{flex:1;min-width:0}
+.crow-name{font-family:var(--head);font-size:.75rem;letter-spacing:.04em;color:var(--cream)}
+.crow-cat{font-family:var(--mono);font-size:.57rem;color:#4a4060;margin-top:.1rem}
+.crow-acts{display:flex;gap:.3rem;flex-shrink:0}
+.cra{background:transparent;border:1px solid var(--border);color:#4a4060;border-radius:4px;padding:.22rem .45rem;font-size:.72rem;cursor:pointer;transition:all .2s}
+.cra:hover{border-color:var(--gold);color:var(--gold)}
+.cra.on{background:rgba(255,58,58,.1);border-color:#6e1e1e;color:var(--live2);animation:blink 1.5s step-start infinite}
+.cra.del:hover{border-color:var(--criminal-b);color:var(--criminal-c)}
+/* streamers admin list */
+.slist{display:flex;flex-direction:column;gap:.45rem}
+.sitem{background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);
+  padding:.6rem .85rem;display:flex;align-items:center;gap:.7rem;transition:border-color .2s}
+.sitem:hover{border-color:var(--gold3)}
+.sitem-info{flex:1;min-width:0}
+.sitem-name{font-family:var(--head);font-size:.78rem;letter-spacing:.05em;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sitem-sub{font-family:var(--mono);font-size:.56rem;color:#4a4060;margin-top:.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sitem-acts{display:flex;gap:.3rem;flex-shrink:0}
+.sia{background:transparent;border:1px solid var(--border);color:#4a4060;border-radius:4px;padding:.25rem .45rem;font-size:.75rem;cursor:pointer;transition:all .2s}
+.sia:hover{border-color:var(--gold);color:var(--gold)}
+.sia.del:hover{border-color:var(--criminal-b);color:var(--criminal-c)}
+.lind{width:7px;height:7px;border-radius:50%;background:#1c1830;flex-shrink:0}
+.lind.on{background:var(--live);box-shadow:0 0 5px var(--live);animation:blink 1.5s step-start infinite}
+/* buttons */
+.btn-g{padding:.58rem;background:linear-gradient(135deg,var(--gold4),var(--gold3),var(--gold));color:#04030a;
+  border:none;border-radius:var(--rs);font-family:var(--head);font-size:.78rem;font-weight:700;letter-spacing:.1em;cursor:pointer;transition:opacity .2s}
+.btn-g:hover{opacity:.86}
+.btn-ghost{padding:.58rem 1rem;background:transparent;border:1px solid var(--border);color:#5a5070;
+  border-radius:var(--rs);font-family:var(--head);font-size:.78rem;cursor:pointer;transition:all .2s}
+.btn-ghost:hover{color:var(--cream);border-color:#5a5070}
+.btn-danger{padding:.58rem 1rem;background:transparent;border:1px solid var(--criminal-b);color:var(--criminal-c);
+  border-radius:var(--rs);font-family:var(--head);font-size:.78rem;cursor:pointer;transition:all .2s}
+.btn-danger:hover{background:rgba(248,113,113,.07)}
+.facts{display:flex;gap:.6rem;margin-top:.9rem}
+.facts .btn-g{flex:1}
+/* plat checks */
+.pchecks{display:flex;gap:1rem;flex-wrap:wrap}
+.pchecks label{display:flex;align-items:center;gap:.35rem;cursor:pointer;font-family:var(--body);font-size:.88rem;color:var(--cream)}
+.pchecks input[type=checkbox]{accent-color:var(--gold);width:13px;height:13px}
+/* color picker row */
+.color-row{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin-top:.3rem}
+.color-swatch{width:28px;height:28px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:transform .2s,border-color .2s;flex-shrink:0}
+.color-swatch:hover,.color-swatch.active{transform:scale(1.2);border-color:var(--cream)}
+
+/* ════════════════════════════════════
+   LOGIN OVERLAY
+════════════════════════════════════ */
+.login-overlay{position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.9);backdrop-filter:blur(16px);
+  display:none;align-items:center;justify-content:center}
+.login-overlay.open{display:flex}
+.login-box{background:#090716;border:1px solid var(--border2);border-radius:var(--r);
+  padding:2.3rem 1.8rem;width:100%;max-width:340px;text-align:center;
+  animation:popIn .3s ease;box-shadow:0 0 60px rgba(201,168,76,.08)}
+@keyframes popIn{from{transform:scale(.88);opacity:0}to{transform:scale(1);opacity:1}}
+.li-ico{font-size:2.6rem;display:block;margin-bottom:.65rem;filter:drop-shadow(0 0 12px rgba(201,168,76,.6))}
+.li-title{font-family:var(--head);font-size:.95rem;letter-spacing:.17em;color:var(--gold2);margin-bottom:1.4rem}
+.li-input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);
+  color:var(--cream);font-family:var(--mono);font-size:.8rem;padding:.6rem 1rem;outline:none;
+  text-align:center;letter-spacing:.18em;transition:border-color .2s}
+.li-input:focus{border-color:var(--gold)}
+.li-hint{font-family:var(--mono);font-size:.6rem;color:#3a3260;margin-top:.4rem}
+.li-hint code{color:var(--gold3)}
+.li-acts{display:flex;gap:.6rem;margin-top:1.1rem}
+
+/* toast */
+.toast{position:fixed;bottom:1.8rem;left:50%;transform:translateX(-50%) translateY(12px);
+  z-index:900;background:#0e0c1e;border:1px solid var(--gold3);border-radius:var(--rs);
+  padding:.62rem 1.4rem;font-family:var(--mono);font-size:.72rem;color:var(--gold2);
+  letter-spacing:.05em;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════ */
+@media(max-width:960px){.home-layout{grid-template-columns:1fr}.home-sidebar{display:none}.profile-body{grid-template-columns:1fr}.profile-right{display:none}}
+@media(max-width:640px){#topbar{padding:0 .7rem;gap:.5rem}.logo-main{font-size:.7rem}.fpbar{display:none}.home-main{padding:.9rem .9rem 3rem}.live-grid,.all-grid{grid-template-columns:1fr 1fr;gap:.7rem}.admin-panel{width:100%}.profile-body{padding:.9rem .9rem 3rem}}
+@media(max-width:400px){.live-grid,.all-grid{grid-template-columns:1fr}}
+/* ════════════════════════════════════
+   MEDIA PLAYER MODAL
+════════════════════════════════════ */
+.player-overlay{
+  position:fixed;inset:0;z-index:850;
+  background:rgba(0,0,0,.92);backdrop-filter:blur(18px);
+  display:none;align-items:center;justify-content:center;
+  padding:1rem;
+}
+.player-overlay.open{display:flex;animation:fadeIn .25s ease}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+.player-modal{
+  width:100%;max-width:1100px;
+  background:#07060e;
+  border:1px solid var(--border2);
+  border-radius:var(--r);
+  overflow:hidden;
+  display:flex;flex-direction:column;
+  max-height:92vh;
+  box-shadow:0 30px 80px rgba(0,0,0,.9),0 0 0 1px rgba(201,168,76,.06);
+  animation:slideUp .3s cubic-bezier(.2,.8,.3,1);
+}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+
+.player-topbar{
+  display:flex;align-items:center;gap:.8rem;
+  padding:.7rem 1rem;border-bottom:1px solid var(--border);
+  background:linear-gradient(90deg,rgba(201,168,76,.04),transparent);
+  flex-shrink:0;
+}
+.player-streamer-info{flex:1;min-width:0;display:flex;align-items:center;gap:.8rem}
+.player-avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--surface2);border:2px solid var(--gold4);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--head);font-weight:900;font-size:.75rem;color:var(--gold3);
+  overflow:hidden;flex-shrink:0;
+}
+.player-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.player-name{font-family:var(--head);font-size:.88rem;font-weight:700;letter-spacing:.06em;color:var(--cream)}
+.player-char{font-family:var(--body);font-style:italic;font-size:.82rem;color:var(--gold3);margin-top:.05rem}
+.player-live-badge{
+  background:var(--live);color:#fff;font-family:var(--mono);font-size:.56rem;
+  font-weight:700;padding:.18rem .55rem;border-radius:3px;letter-spacing:.1em;
+  display:flex;align-items:center;gap:.35rem;flex-shrink:0;
+  animation:lg 2s ease-in-out infinite;
+}
+.player-live-badge::before{content:'';width:5px;height:5px;border-radius:50%;background:#fff;animation:blink 1.2s step-start infinite}
+
+/* platform tabs */
+.player-plat-tabs{display:flex;gap:.35rem;flex-shrink:0}
+.pptab{
+  font-family:var(--head);font-size:.62rem;font-weight:600;letter-spacing:.08em;
+  padding:.28rem .7rem;border-radius:var(--rs);border:1px solid var(--border);
+  color:#4a4060;cursor:pointer;transition:all .2s;text-transform:uppercase;
+}
+.pptab:hover{color:var(--cream);border-color:#4a4060}
+.pptab.active.twitch{background:var(--twitch);border-color:var(--twitch);color:#fff}
+.pptab.active.kick{background:var(--kick);border-color:var(--kick);color:#0a0c00}
+.pptab.active.youtube{background:var(--youtube);border-color:var(--youtube);color:#fff}
+
+/* close / popout */
+.player-actions{display:flex;gap:.4rem;flex-shrink:0}
+.player-action-btn{
+  background:transparent;border:1px solid var(--border);color:#5a5070;
+  width:30px;height:30px;border-radius:var(--rs);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;transition:all .2s;
+}
+.player-action-btn:hover{border-color:var(--gold);color:var(--gold)}
+.player-action-btn.close-p:hover{border-color:var(--criminal-b);color:var(--criminal-c)}
+
+/* main stage */
+.player-stage{
+  position:relative;
+  background:#000;flex:1;min-height:0;
+}
+.player-stage iframe{
+  width:100%;height:100%;border:none;display:block;
+  min-height:340px;
+}
+.player-no-embed{
+  width:100%;min-height:340px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.8rem;background:var(--surface);color:#3a3260;
+  font-family:var(--mono);font-size:.75rem;text-align:center;padding:2rem;
+}
+.player-no-embed .big-ico{font-size:3rem;opacity:.25;display:block;margin-bottom:.3rem}
+.player-no-embed a{color:var(--gold3);text-decoration:none;word-break:break-all}
+.player-no-embed a:hover{color:var(--gold)}
+
+/* bottom bar: chat toggle + info */
+.player-bottombar{
+  display:flex;align-items:center;gap:.8rem;
+  padding:.55rem 1rem;border-top:1px solid var(--border);
+  background:var(--bg2);flex-shrink:0;flex-wrap:wrap;
+}
+.player-bottom-info{
+  font-family:var(--mono);font-size:.62rem;color:#4a4060;
+  display:flex;align-items:center;gap:1rem;flex:1;flex-wrap:wrap;
+}
+.player-chat-toggle{
+  font-family:var(--head);font-size:.62rem;letter-spacing:.1em;
+  background:rgba(201,168,76,.07);border:1px solid var(--gold4);
+  color:var(--gold3);padding:.28rem .8rem;border-radius:var(--rs);
+  cursor:pointer;transition:all .2s;text-transform:uppercase;white-space:nowrap;
+}
+.player-chat-toggle:hover{background:rgba(201,168,76,.14);color:var(--gold)}
+.player-chat-toggle.active{background:rgba(201,168,76,.14);border-color:var(--gold3);color:var(--gold2)}
+
+/* with-chat layout */
+.player-with-chat{
+  display:flex;flex:1;min-height:0;
+}
+.player-with-chat .player-stage{flex:1}
+.player-chat-panel{
+  width:280px;flex-shrink:0;
+  border-left:1px solid var(--border);
+  background:var(--bg2);
+  display:flex;flex-direction:column;
+}
+.player-chat-head{
+  padding:.55rem .8rem;border-bottom:1px solid var(--border);
+  font-family:var(--head);font-size:.62rem;letter-spacing:.15em;color:var(--gold3);
+  text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.player-chat-msgs{
+  flex:1;overflow-y:auto;padding:.5rem .6rem;
+  display:flex;flex-direction:column;gap:.3rem;
+}
+.player-chat-msgs::-webkit-scrollbar{width:3px}
+.pcm{
+  padding:.3rem .5rem;border-radius:5px;background:var(--surface2);
+  font-size:.78rem;line-height:1.4;animation:cIn .2s ease;
+}
+.pcm .pn{font-family:var(--head);font-size:.62rem;margin-right:.35rem}
+.pcm .pn.mod{color:#fbbf24}.pcm .pn.user{color:var(--police-c)}.pcm .pn.self{color:var(--gold2)}
+.pcm .pt{color:#7a7090}
+.pcm.sys{background:rgba(201,168,76,.04);border-left:2px solid var(--gold3)}
+.pcm.sys .pt{color:var(--gold3);font-style:italic;font-size:.72rem}
+.player-chat-input-row{
+  display:flex;gap:.35rem;padding:.5rem .6rem;border-top:1px solid var(--border);flex-shrink:0;
+}
+.player-chat-input{
+  flex:1;background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);
+  color:var(--cream);font-family:var(--body);font-size:.82rem;
+  padding:.38rem .6rem;outline:none;transition:border-color .2s;
+}
+.player-chat-input:focus{border-color:var(--gold)}
+.player-chat-input::placeholder{color:#2a2540;font-size:.75rem}
+.player-chat-send{
+  background:rgba(201,168,76,.1);border:1px solid var(--gold4);color:var(--gold3);
+  border-radius:var(--rs);padding:.38rem .65rem;font-family:var(--head);font-size:.6rem;
+  letter-spacing:.06em;cursor:pointer;transition:all .2s;
+}
+.player-chat-send:hover{background:rgba(201,168,76,.2);color:var(--gold)}
+
+/* miniplayer (pip) */
+.miniplayer{
+  position:fixed;bottom:5.5rem;right:1.2rem;z-index:480;
+  width:300px;border-radius:var(--r);overflow:hidden;
+  border:1px solid var(--border2);
+  box-shadow:0 12px 40px rgba(0,0,0,.8);
+  display:none;flex-direction:column;
+  background:#000;
+}
+.miniplayer.open{display:flex;animation:slideUp .25s ease}
+.mini-stage{position:relative;aspect-ratio:16/9}
+.mini-stage iframe{width:100%;height:100%;border:none;display:block}
+.mini-bar{
+  display:flex;align-items:center;gap:.5rem;
+  padding:.45rem .6rem;background:#07060e;border-top:1px solid var(--border);
+}
+.mini-bar-name{font-family:var(--head);font-size:.65rem;letter-spacing:.05em;color:var(--cream);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini-expand{background:transparent;border:1px solid var(--border);color:#4a4060;border-radius:4px;padding:.2rem .45rem;font-size:.65rem;cursor:pointer;transition:all .2s}
+.mini-expand:hover{border-color:var(--gold);color:var(--gold)}
+.mini-close{background:transparent;border:none;color:#4a4060;cursor:pointer;font-size:.95rem;transition:color .2s;line-height:1}
+.mini-close:hover{color:var(--criminal-c)}
+@media(max-width:640px){
+  .player-chat-panel{display:none}
+  .player-modal{max-height:100vh;border-radius:0}
+  .miniplayer{width:220px}
+}
+</style>
+</head>
+<body>
+
+<!-- ════ TOPBAR ════ -->
+<div id="topbar">
+  <button class="logo-btn" onclick="goHome()">
+    <span class="logo-angel">👼</span>
+    <div class="logo-words">
+      <span class="logo-main">CIDADE DOS ANJOS</span>
+      <span class="logo-sub">GTA Roleplay · Lives</span>
+    </div>
+  </button>
+  <div class="search-wrap">
+    <span class="search-ico">✦</span>
+    <input type="text" id="searchInput" placeholder="Streamer ou personagem…" autocomplete="off"/>
+    <div class="sdrop" id="sdrop"></div>
+  </div>
+  <div class="fpbar" id="fpbar">
+    <button class="fp active" data-f="all">Todos</button>
+    <button class="fp flive" data-f="live">🔴 Ao Vivo</button>
+    <button class="fp fp-police" data-f="police">Polícia</button>
+    <button class="fp fp-criminal" data-f="criminal">Crime</button>
+    <button class="fp fp-medic" data-f="medic">Médico</button>
+    <button class="fp fp-mechanic" data-f="mechanic">Mecânico</button>
+    <button class="fp fp-governo" data-f="governo">Governo</button>
+    <button class="fp fp-twitch" data-f="twitch">Twitch</button>
+    <button class="fp fp-kick" data-f="kick">Kick</button>
+    <button class="fp" data-f="partner">✦ Parceiros</button>
+  </div>
+  <div class="hdr-btns">
+    <button class="hbtn" onclick="showPage('multilive')">📺 Multi-Live</button>
+    <button class="hbtn" onclick="showPage('dashboard')">📊 Dashboard</button>
+    <button class="hbtn" id="adminBtn">⚙ Admin</button>
+    <button class="notif-btn" id="notifBtn" title="Notificações">🔔<span class="notif-badge" id="notifBadge"></span></button>
+  </div>
+</div>
+
+<!-- ════ NOTIFICATION PANEL ════ -->
+<div class="notif-panel" id="notifPanel">
+  <div class="notif-phead">
+    <span>🔔 Notificações</span>
+    <span style="font-family:var(--mono);font-size:.56rem;color:#3a3260" id="notifCount">0</span>
+  </div>
+  <div class="notif-list" id="notifList"><div class="notif-empty">Nenhuma notificação.</div></div>
+  <div class="sub-row">
+    <span class="sub-lbl">Alertas de ao vivo</span>
+    <button class="sub-toggle" id="subToggle" onclick="toggleSub()">Ativar</button>
+  </div>
+  <div class="notif-clear" onclick="clearNotifs()">Limpar tudo</div>
+</div>
+
+<!-- ════ PAGE: HOME ════ -->
+<div class="page active" id="page-home">
+  <div class="home-layout">
+    <div style="grid-column:1/-1">
+      <div class="hero">
+        <div class="hero-wings">🕊️</div>
+        <div class="hero-ey">✦ Comunidade em tempo real ✦</div>
+        <h1 class="hero-title">CIDADE DOS ANJOS RP</h1>
+        <p class="hero-sub">Acompanhe seus streamers favoritos</p>
+        <div class="hstats">
+          <div class="hstat"><span class="hstat-n red" id="sLive">0</span><span class="hstat-l">Ao Vivo</span></div>
+          <div class="hstat"><span class="hstat-n" id="sTotal">0</span><span class="hstat-l">Streamers</span></div>
+          <div class="hstat"><span class="hstat-n" id="sChars">0</span><span class="hstat-l">Personagens</span></div>
+          <div class="hstat"><span class="hstat-n" id="sViews">0</span><span class="hstat-l">Acessos</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="home-main">
+      <div id="sodWrap"></div>
+      <div class="sec-lbl" id="liveLbl" style="display:none">🔴 Ao Vivo Agora</div>
+      <div class="live-grid" id="liveGrid"></div>
+      <div class="sec-lbl" id="allLbl">Todos os Streamers</div>
+      <div class="all-grid" id="allGrid"></div>
+    </div>
+    <aside class="home-sidebar">
+      <!-- Ranking -->
+      <div class="widget">
+        <div class="whead"><span class="wtitle">🏆 Ranking</span></div>
+        <div class="wbody" id="rankWidget"></div>
+      </div>
+      <!-- News -->
+      <div class="widget">
+        <div class="whead"><span class="wtitle">📰 Notícias</span></div>
+        <div class="wbody" id="newsWidget"></div>
+      </div>
+      <!-- Events -->
+      <div class="widget">
+        <div class="whead"><span class="wtitle">📅 Eventos</span></div>
+        <div class="wbody" id="evWidget"></div>
+      </div>
+      <!-- Notices -->
+      <div class="widget">
+        <div class="whead"><span class="wtitle">📣 Avisos</span></div>
+        <div class="wbody" id="noticeWidget"></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- ════ PAGE: PROFILE ════ -->
+<div class="page" id="page-profile">
+  <div id="profileContent"></div>
+</div>
+
+<!-- ════ PAGE: MULTI-LIVE ════ -->
+<div class="page" id="page-multilive">
+  <div style="margin-bottom:1.2rem">
+    <div class="sec-lbl">📺 Multi-Live — Assista vários ao mesmo tempo</div>
+  </div>
+  <div class="ml-controls">
+    <select class="ml-sel" id="mlStreamerSel"><option value="">— Selecionar Streamer —</option></select>
+    <select class="ml-sel" id="mlPlatSel"><option value="">— Plataforma —</option></select>
+    <button class="btn-g" style="padding:.45rem 1rem;font-size:.72rem" onclick="addMLSlot()">+ Adicionar</button>
+    <button class="btn-ghost" style="padding:.45rem .8rem;font-size:.72rem" onclick="clearMLSlots()">Limpar</button>
+    <select class="ml-sel" id="mlLayout" onchange="updateMLLayout()">
+      <option value="1">1 tela</option><option value="2" selected>2 telas</option>
+      <option value="3">3 telas</option><option value="4">4 telas</option>
+    </select>
+  </div>
+  <div class="ml-embeds c2" id="mlEmbeds"></div>
+</div>
+
+<!-- ════ PAGE: DASHBOARD ════ -->
+<div class="page" id="page-dashboard">
+  <div class="sec-lbl">📊 Dashboard da Cidade</div>
+  <div class="dash-grid" id="dashCards"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.2rem" id="dashCharts"></div>
+  <div class="chart-area">
+    <div class="chart-title">Top Streamers por Atividade</div>
+    <table class="top-streamers-table" id="topTable"></table>
+  </div>
+</div>
+
+<!-- ════ CONTEXT MENU ════ -->
+<div style="position:fixed;z-index:600;background:#0a0818;border:1px solid var(--border2);border-radius:var(--rs);min-width:165px;overflow:hidden;display:none;box-shadow:0 14px 44px rgba(0,0,0,.8)" id="ctxMenu">
+  <div style="padding:.58rem .95rem;font-family:var(--body);font-size:.85rem;cursor:pointer;display:flex;align-items:center;gap:.6rem;transition:background .15s" class="ctx-item" id="ctxProfile">👤 Ver perfil</div>
+  <div style="padding:.58rem .95rem;font-family:var(--body);font-size:.85rem;cursor:pointer;display:flex;align-items:center;gap:.6rem;transition:background .15s" class="ctx-item" id="ctxEdit">✏️ Editar</div>
+  <div style="padding:.58rem .95rem;font-family:var(--body);font-size:.85rem;cursor:pointer;display:flex;align-items:center;gap:.6rem;transition:background .15s" class="ctx-item" id="ctxToggleLive">📡 Toggle ao vivo</div>
+  <div style="padding:.58rem .95rem;font-family:var(--body);font-size:.85rem;cursor:pointer;display:flex;align-items:center;gap:.6rem;transition:background .15s;color:var(--criminal-c)" class="ctx-item" id="ctxDel">🗑️ Remover</div>
+</div>
+
+<!-- ════ LOGIN ════ -->
+<div class="login-overlay" id="loginOv">
+  <div class="login-box">
+    <span class="li-ico">🔐</span>
+    <div class="li-title">PAINEL ADMIN</div>
+    <input type="password" class="li-input" id="pwIn" placeholder="••••••••" maxlength="32"/>
+    <p class="li-hint">Padrão: <code>anjos2024</code></p>
+    <div class="li-acts">
+      <button class="btn-ghost" onclick="closeLogin()">Cancelar</button>
+      <button class="btn-g" style="flex:1" onclick="doLogin()">Entrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ ADMIN PANEL ════ -->
+<div class="backdrop" id="backdrop"></div>
+<div class="admin-panel" id="adminPanel">
+  <div class="ap-head"><h2>⚙ PAINEL ADMIN</h2><button class="xbtn" onclick="closeAdmin()">✕</button></div>
+  <div class="ap-tabs">
+    <div class="aptab active" data-t="streamers">Streamers</div>
+    <div class="aptab" data-t="add">Adicionar</div>
+    <div class="aptab" data-t="chars">Personagens</div>
+    <div class="aptab" data-t="content">Conteúdo</div>
+    <div class="aptab" data-t="settings">Config</div>
+  </div>
+  <div class="ap-body" id="apBody"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ════ MEDIA PLAYER MODAL ════ -->
+<div class="player-overlay" id="playerOverlay">
+  <div class="player-modal" id="playerModal">
+    <div class="player-topbar">
+      <div class="player-streamer-info">
+        <div class="player-avatar" id="playerAvatar"></div>
+        <div>
+          <div class="player-name" id="playerName">—</div>
+          <div class="player-char" id="playerChar">—</div>
+        </div>
+        <div class="player-live-badge" id="playerLiveBadge" style="display:none">AO VIVO</div>
+      </div>
+      <div class="player-plat-tabs" id="playerPlatTabs"></div>
+      <div class="player-actions">
+        <button class="player-action-btn" onclick="toggleMiniPlayer()" title="Mini Player (PiP)">⧉</button>
+        <button class="player-action-btn" id="playerExtLink" title="Abrir na plataforma" onclick="openExternal()">↗</button>
+        <button class="player-action-btn close-p" onclick="closePlayer()" title="Fechar">✕</button>
+      </div>
+    </div>
+    <div style="flex:1;min-height:0;display:flex" id="playerWithChat">
+      <div class="player-stage" id="playerStage"></div>
+      <div class="player-chat-panel" id="playerChatPanel" style="display:none">
+        <div class="player-chat-head">
+          <span>💬 Chat da Página</span>
+          <span style="font-family:var(--mono);font-size:.55rem;color:#3a3260" id="playerChatCount">0 msgs</span>
+        </div>
+        <div class="player-chat-msgs" id="playerChatMsgs"></div>
+        <div style="padding:.38rem .6rem;border-bottom:1px solid var(--border)">
+          <input type="text" id="playerNickInput" placeholder="Seu nick…" maxlength="20"
+            style="width:100%;background:transparent;border:none;color:var(--gold3);font-family:var(--mono);font-size:.62rem;outline:none"/>
+        </div>
+        <div class="player-chat-input-row">
+          <input type="text" class="player-chat-input" id="playerChatIn" placeholder="Mensagem…" maxlength="200"
+            onkeydown="if(event.key==='Enter')sendPlayerChat()"/>
+          <button class="player-chat-send" onclick="sendPlayerChat()">Enviar</button>
+        </div>
+      </div>
+    </div>
+    <div class="player-bottombar">
+      <div class="player-bottom-info" id="playerBottomInfo"></div>
+      <button class="player-chat-toggle" id="chatToggleBtn" onclick="togglePlayerChat()">💬 Chat</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ MINI PLAYER ════ -->
+<div class="miniplayer" id="miniPlayer">
+  <div class="mini-stage" id="miniStage"></div>
+  <div class="mini-bar">
+    <span class="mini-bar-name" id="miniBarName">—</span>
+    <button class="mini-expand" onclick="expandMiniPlayer()">⤢ Expandir</button>
+    <button class="mini-close" onclick="closeMiniPlayer()">✕</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// DATA & STORAGE
+// ══════════════════════════════════════════
+const KEYS={s:'cda_s4',n:'cda_n2',e:'cda_e2',h:'cda_h2',lh:'cda_lh2',nc:'cda_nc2',pw:'cda_pw2',sod:'cda_sod2',notif:'cda_notif',sub:'cda_sub',acc:'cda_acc'};
+function gl(k,d){try{const r=localStorage.getItem(k);return r?JSON.parse(r):d}catch{return d}}
+function sl(k,v){localStorage.setItem(k,JSON.stringify(v))}
+function getPw(){return localStorage.getItem(KEYS.pw)||'anjos2024'}
+function setPw(p){localStorage.setItem(KEYS.pw,p)}
+
+const CAT={police:'Polícia',criminal:'Crime',medic:'Médico',civilian:'Civil',mechanic:'Mecânico',governo:'Governo'};
+const CICO={police:'🚔',criminal:'💀',medic:'🏥',civilian:'👤',mechanic:'🔧',governo:'🏛️'};
+const PLAT_L={twitch:'Twitch',kick:'Kick',youtube:'YouTube'};
+
+let _id=9000;function nid(){return++_id}
+
+const DS=[
+  {id:1,name:'AngelRP',avatar:'',banner:'',partner:true,featured:false,accent:'#c9a84c',
+   bio:'Policial corrupto ou herói? Descubra ao vivo!',
+   socials:{discord:'',instagram:'',twitter:''},
+   platforms:['twitch','kick'],links:{twitch:'https://twitch.tv/',kick:'https://kick.com/'},
+   chars:[{id:101,name:'Carlos Anjos',cat:'police',live:true,liveCount:42,activePlat:'twitch'},
+          {id:102,name:'El Diablo',cat:'criminal',live:false,liveCount:14,activePlat:'twitch'}],
+   activeCharId:101,views:1240,totalLiveTime:186},
+  {id:2,name:'CrimsonRP',avatar:'',banner:'',partner:true,featured:false,accent:'#f87171',
+   bio:'O maior criminoso da cidade. 55 lives de pura adrenalina.',
+   socials:{discord:'',instagram:'',twitter:''},
+   platforms:['twitch'],links:{twitch:'https://twitch.tv/'},
+   chars:[{id:201,name:'Marco Ferro',cat:'criminal',live:true,liveCount:58,activePlat:'twitch'}],
+   activeCharId:201,views:980,totalLiveTime:220},
+  {id:3,name:'MedicaRP',avatar:'',banner:'',partner:false,featured:true,accent:'#4ade80',
+   bio:'Dra. Isabela salva vidas todos os dias. Streamer em ascensão!',
+   socials:{discord:'',instagram:'',twitter:''},
+   platforms:['kick'],links:{kick:'https://kick.com/'},
+   chars:[{id:301,name:'Dra. Isabela',cat:'medic',live:false,liveCount:9,activePlat:'kick'}],
+   activeCharId:301,views:420,totalLiveTime:54},
+  {id:4,name:'LexGoverno',avatar:'',banner:'',partner:false,featured:false,accent:'#fb923c',
+   bio:'Prefeito, advogado e às vezes mecânico. A política da cidade passa por ele.',
+   socials:{discord:'',instagram:'',twitter:''},
+   platforms:['twitch','youtube'],links:{twitch:'https://twitch.tv/',youtube:'https://youtube.com/'},
+   chars:[{id:401,name:'Lex Celestino',cat:'governo',live:false,liveCount:22,activePlat:'twitch'},
+          {id:402,name:'Lex Mecânico',cat:'mechanic',live:false,liveCount:7,activePlat:'twitch'}],
+   activeCharId:401,views:610,totalLiveTime:98}
+];
+
+const DN=[
+  {id:1,type:'alert',text:'<strong>Alerta:</strong> Perseguição na Alameda Central.',time:'Há 5 min'},
+  {id:2,type:'event',text:'<strong>Evento:</strong> Julgamento de Marco Ferro às 20h.',time:'Há 20 min'},
+  {id:3,type:'update',text:'<strong>Update:</strong> Novo hospital inaugurado.',time:'Há 1h'},
+];
+const DE=[
+  {id:1,title:'Julgamento do Século',date:'Hoje, 20:00',desc:'Marco Ferro no banco dos réus.',status:'live'},
+  {id:2,title:'Copa de Corrida',date:'Sáb, 18:00',desc:'Torneio no circuito sul.',status:'upcoming'},
+];
+const DNC=[
+  {id:1,streamer:'CrimsonRP',text:'Live especial amanhã às 19h! Missão secreta 🔥',time:'Há 30 min'},
+  {id:2,streamer:'AngelRP',text:'Sem live hoje, volto amanhã com novidades!',time:'Há 2h'},
+];
+
+let streamers=gl(KEYS.s,DS),news=gl(KEYS.n,DN),events=gl(KEYS.e,DE),notices=gl(KEYS.nc,DNC);
+let liveHist=gl(KEYS.lh,[]),cityHist=gl(KEYS.h,[]);
+let sodId=gl(KEYS.sod,1);
+let notifs=gl(KEYS.notif,[]);
+let subEnabled=gl(KEYS.sub,false);
+let accessCounts=gl(KEYS.acc,{});
+let activeFilter='all',editId=null,formChars=[],ctxId=null;
+let adminUnlocked=false,pendingFn=null;
+let mlSlots=[],currentProfileId=null;
+
+function saveAll(){sl(KEYS.s,streamers);sl(KEYS.n,news);sl(KEYS.e,events);sl(KEYS.nc,notices);sl(KEYS.lh,liveHist);sl(KEYS.h,cityHist);sl(KEYS.sod,sodId);sl(KEYS.notif,notifs);sl(KEYS.acc,accessCounts)}
+
+// ── helpers ──
+function isLive(s){return s.chars.some(c=>c.live)}
+function activeChar(s){return s.chars.find(c=>c.id===s.activeCharId)||s.chars.find(c=>c.live)||s.chars[0]}
+function initials(n){return(n||'?').split(' ').map(w=>w[0]||'').join('').toUpperCase().slice(0,2)||'??'}
+function catColor(c){return{police:'#60a5fa',criminal:'#f87171',medic:'#4ade80',civilian:'#fbbf24',mechanic:'#a78bfa',governo:'#fb923c'}[c]||'#c9a84c'}
+function score(s){return s.chars.reduce((a,c)=>a+c.liveCount,0)*10+(isLive(s)?500:0)+(s.views||0)*0.5}
+function totalLives(){return streamers.reduce((a,s)=>a+s.chars.reduce((b,c)=>b+c.liveCount,0),0)}
+function totalChars(){return streamers.reduce((a,s)=>a+s.chars.length,0)}
+function totalViews(){return streamers.reduce((a,s)=>a+(s.views||0),0)}
+function timeAgo(ts){const d=Date.now()-ts,m=Math.floor(d/60000);if(m<1)return'Agora';if(m<60)return`Há ${m}min`;return`Há ${Math.floor(m/60)}h`}
+
+// ══════════════════════════════════════════
+// ROUTER
+// ══════════════════════════════════════════
+function showPage(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  window.scrollTo(0,0);
+  if(name==='home'){renderHome()}
+  if(name==='multilive'){renderML()}
+  if(name==='dashboard'){renderDashboard()}
+}
+function goHome(){activeFilter='all';document.querySelectorAll('.fp').forEach(b=>b.classList.toggle('active',b.dataset.f==='all'));showPage('home')}
+
+// ══════════════════════════════════════════
+// HOME
+// ══════════════════════════════════════════
+function renderHome(){
+  renderSOD();renderGrid();renderSidebar();
+  document.getElementById('sLive').textContent=streamers.filter(isLive).length;
+  document.getElementById('sTotal').textContent=streamers.length;
+  document.getElementById('sChars').textContent=totalChars();
+  document.getElementById('sViews').textContent=totalViews().toLocaleString('pt-BR');
+}
+
+function applyFilter(list){
+  if(activeFilter==='all')return list;
+  if(activeFilter==='live')return list.filter(isLive);
+  if(activeFilter==='partner')return list.filter(s=>s.partner);
+  if(activeFilter==='twitch')return list.filter(s=>s.platforms.includes('twitch'));
+  if(activeFilter==='kick')return list.filter(s=>s.platforms.includes('kick'));
+  return list.filter(s=>s.chars.some(c=>c.cat===activeFilter));
+}
+
+function renderSOD(){
+  const w=document.getElementById('sodWrap');w.innerHTML='';
+  const sod=sodId?streamers.find(s=>s.id===sodId):null;if(!sod)return;
+  const ac=activeChar(sod);
+  w.innerHTML=`<div class="sod" onclick="openProfile(${sod.id})">
+    <div class="sod-crown">👑</div>
+    <div class="sod-info">
+      <div class="sod-lbl">✦ Personagem do Dia</div>
+      <div class="sod-name">${sod.name}</div>
+      <div class="sod-char">${ac?ac.name+'  ·  '+CAT[ac.cat]:''}</div>
+      <div class="sod-msg">Streamer em destaque — clique para ver o perfil completo!</div>
+    </div>
+  </div>`;
+}
+
+function renderGrid(){
+  const lg=document.getElementById('liveGrid'),ag=document.getElementById('allGrid');
+  const ll=document.getElementById('liveLbl'),al=document.getElementById('allLbl');
+  lg.innerHTML='';ag.innerHTML='';
+  const filtered=applyFilter(streamers);
+  const liveList=filtered.filter(isLive);
+  const offList=filtered.filter(s=>!isLive(s));
+  if(liveList.length&&activeFilter!=='live'){ll.style.display='';liveList.forEach((s,i)=>{const c=buildCard(s);c.style.animationDelay=i*40+'ms';lg.appendChild(c)})}
+  else ll.style.display='none';
+  const showList=activeFilter==='live'?liveList:offList;
+  al.textContent=activeFilter==='live'?'🔴 Ao Vivo Agora':(activeFilter==='all'?'Offline':'Streamers');
+  if(!showList.length&&!liveList.length){ag.innerHTML=`<div class="empty-st"><span class="empty-ico">👼</span>Nenhum streamer encontrado.<br>Use o admin para adicionar.</div>`}
+  else showList.forEach((s,i)=>{const c=buildCard(s);c.style.animationDelay=i*35+'ms';ag.appendChild(c)});
+}
+
+function buildCard(s){
+  const live=isLive(s);
+  const ac=activeChar(s)||s.chars[0];
+  const cat=ac?ac.cat:'civilian';
+  const el=document.createElement('div');
+  el.className='card'+(live?' is-live':'')+(s.partner?' is-partner':'');
+  el.dataset.id=s.id;el.dataset.cat=cat;
+  const imgTag=s.avatar?`<img src="${s.avatar}" alt="${s.name}" onerror="this.remove()"/>`:'';
+  const liveBadge=live?`<span class="b-live">AO VIVO</span>`:`<span class="b-off">OFFLINE</span>`;
+  const partnerBadge=s.partner?`<span class="b-partner">PARCEIRO</span>`:'';
+  const featBadge=s.featured&&!s.partner?`<span class="b-feat">✦ DESTAQUE</span>`:'';
+  const pdots=s.platforms.map(p=>`<span class="pdot ${p}">${p==='twitch'?'T':p==='kick'?'K':'YT'}</span>`).join('');
+  const tabs=s.chars.map(c=>`<button class="chtab${(c.id===s.activeCharId||c.live)?' active':''}" onclick="swChar(event,${s.id},${c.id})">${c.name.split(' ')[0]}${c.live?'<span class="lr"></span>':''}</button>`).join('');
+  const disp=ac||s.chars[0];
+  const lbtn=s.platforms.map(p=>`<button class="lbtn ${p}" onclick="event.stopPropagation();openPlayer(${s.id},'${p}')">▶ ${PLAT_L[p]}</button>`).join('');
+  el.innerHTML=`
+    <div class="cthumb" style="background:${s.accent?s.accent+'1a':'var(--surface2)'}">
+      ${imgTag}<div class="cthumb-fb" style="color:${s.accent||'var(--gold3)'}26">${initials(s.name)}</div>
+      ${liveBadge}${partnerBadge}${featBadge}<div class="pdots">${pdots}</div>
+    </div>
+    <div class="cbody">
+      <div class="cname">${s.name}</div>
+      <div class="char-tabs" id="ctabs${s.id}">${tabs}</div>
+      <div class="char-disp" id="cdisp${s.id}">${disp?disp.name:''}</div>
+      <div class="cstats" id="cstats${s.id}">
+        ${disp?`<span class="ctag">${CICO[disp.cat]} ${CAT[disp.cat]}</span><span>🎬 ${disp.liveCount} lives</span>`:''}
+      </div>
+      <div class="card-links">${lbtn}</div>
+      <button class="profile-btn" onclick="openProfile(${s.id})">Ver perfil completo →</button>
+    </div>`;
+  el.addEventListener('contextmenu',e=>{e.preventDefault();openCtx(e,s.id)});
+  return el;
+}
+
+function swChar(e,sid,cid){
+  e.stopPropagation();
+  const s=streamers.find(x=>x.id===sid);if(!s)return;
+  s.activeCharId=cid;sl(KEYS.s,streamers);
+  const tabs=document.getElementById('ctabs'+sid);
+  if(tabs)tabs.querySelectorAll('.chtab').forEach(t=>{t.classList.toggle('active',parseInt(t.textContent)===(s.chars.find(c=>c.id===cid)||{}).name?.split(' ')[0]||false);});
+  document.querySelectorAll(`#ctabs${sid} .chtab`).forEach((t,i)=>{t.classList.toggle('active',s.chars[i]?.id===cid)});
+  const c=s.chars.find(x=>x.id===cid);if(!c)return;
+  const d=document.getElementById('cdisp'+sid);if(d)d.textContent=c.name;
+  const st=document.getElementById('cstats'+sid);if(st)st.innerHTML=`<span class="ctag">${CICO[c.cat]} ${CAT[c.cat]}</span><span>🎬 ${c.liveCount} lives</span>`;
+}
+
+// ── sidebar ──
+function renderSidebar(){
+  // ranking
+  const rw=document.getElementById('rankWidget');
+  const sorted=[...streamers].sort((a,b)=>score(b)-score(a));
+  const medals=['gold','silver','bronze'];
+  rw.innerHTML=sorted.slice(0,5).map((s,i)=>`
+    <div class="rank-item" onclick="openProfile(${s.id})">
+      <span class="rank-num ${medals[i]||''}">${i+1}</span>
+      <div class="rank-info">
+        <div class="rank-name">${s.name}${isLive(s)?'<span class="ldot" style="display:inline-block;margin-left:.4rem"></span>':''}</div>
+        <div class="rank-detail">${s.chars.reduce((a,c)=>a+c.liveCount,0)} lives · ${(s.views||0).toLocaleString('pt-BR')} views</div>
+      </div>
+      <span class="rank-score">${Math.round(score(s)).toLocaleString('pt-BR')}</span>
+    </div>`).join('');
+  // news
+  const nw=document.getElementById('newsWidget');
+  nw.innerHTML=news.slice(0,4).map(n=>`<div class="news-item"><div class="ndot ${n.type}"></div><div><div class="ntext">${n.text}</div><div class="ntime">${n.time}</div></div></div>`).join('')||`<p style="color:#2e2a4a;font-size:.75rem">Sem notícias.</p>`;
+  // events
+  const ew=document.getElementById('evWidget');
+  ew.innerHTML=events.map(ev=>`<div class="ev-item"><div class="ev-title">${ev.title}<span class="ebadge ${ev.status==='live'?'':'up'}">${ev.status==='live'?'AO VIVO':'Em breve'}</span></div><div class="ev-meta">📅 ${ev.date}</div><div class="ev-desc">${ev.desc}</div></div>`).join('')||`<p style="color:#2e2a4a;font-size:.75rem">Sem eventos.</p>`;
+  // notices
+  const ncw=document.getElementById('noticeWidget');
+  ncw.innerHTML=notices.map(n=>`<div class="notice-item"><div class="ni-name">${n.streamer}</div><div class="ni-text">${n.text}</div><div class="ni-time">${n.time}</div></div>`).join('')||`<p style="color:#2e2a4a;font-size:.75rem">Sem avisos.</p>`;
+}
+
+// ══════════════════════════════════════════
+// PROFILE PAGE
+// ══════════════════════════════════════════
+function openProfile(sid){
+  currentProfileId=sid;
+  const s=streamers.find(x=>x.id===sid);if(!s)return;
+  // track access
+  if(!accessCounts[sid])accessCounts[sid]=0;
+  accessCounts[sid]++;s.views=(s.views||0)+1;
+  saveAll();
+  renderProfile(s);showPage('profile');
+}
+
+function renderProfile(s){
+  const pc=document.getElementById('profileContent');
+  const live=isLive(s);
+  const ac=activeChar(s);
+  const liveChars=s.chars.filter(c=>c.live);
+  const totalL=s.chars.reduce((a,c)=>a+c.liveCount,0);
+  const accent=s.accent||'#c9a84c';
+
+  const bannerHtml=s.banner?`<img class="profile-banner" src="${s.banner}" onerror="this.remove()"/>`:`<div class="profile-banner-fallback" style="background:linear-gradient(135deg,${accent}18,${accent}06,var(--bg2))"></div>`;
+  const avatarHtml=s.avatar?`<img src="${s.avatar}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.remove()"/>`:initials(s.name);
+
+  const badges=[
+    live?`<span class="pbadge live">🔴 AO VIVO</span>`:'',
+    s.partner?`<span class="pbadge partner">✦ PARCEIRO</span>`:'',
+    s.featured?`<span class="pbadge featured">✦ DESTAQUE</span>`:'',
+  ].filter(Boolean).join('');
+
+  const socialBtns=[
+    s.socials?.discord&&`<a class="soc-btn discord" href="${s.socials.discord}" target="_blank">💬 Discord</a>`,
+    s.socials?.instagram&&`<a class="soc-btn instagram" href="${s.socials.instagram}" target="_blank">📸 Instagram</a>`,
+    s.socials?.twitter&&`<a class="soc-btn twitter" href="${s.socials.twitter}" target="_blank">🐦 Twitter/X</a>`,
+  ].filter(Boolean).join('');
+
+  const platBtns=s.platforms.map(p=>`<button class="plat-link-btn ${p}" onclick="openPlayer(${s.id},'${p}')">${p==='twitch'?'T':p==='kick'?'K':'▶'} ${PLAT_L[p]}</button>`).join('');
+
+  const charsHtml=s.chars.map(c=>`
+    <div class="char-card" data-cat="${c.cat}">
+      <div class="cc-live-indicator ${c.live?'on':''}"></div>
+      <div class="cc-name">${c.name}${c.live?` <span style="font-size:.6em;color:var(--live)">🔴</span>`:''}</div>
+      <div class="cc-cat">${CICO[c.cat]} ${CAT[c.cat]}</div>
+      <div class="cc-stats"><span>🎬 ${c.liveCount} lives</span>${c.live?'<span style="color:var(--live2)">● Ao vivo</span>':''}</div>
+    </div>`).join('');
+
+  // embed section
+  let embedsHtml='';
+  if(liveChars.length){
+    const cols=liveChars.length>1?'cols-2':'cols-1';
+    embedsHtml=`<div class="embed-grid ${cols}">`+
+    liveChars.map(c=>{
+      const plat=c.activePlat||s.platforms[0];
+      const link=s.links[plat]||'#';
+      const chanName=link.split('/').filter(Boolean).pop()||'channel';
+      let iframeSrc='';
+      if(plat==='twitch')iframeSrc=`https://player.twitch.tv/?channel=${chanName}&parent=${location.hostname}`;
+      else if(plat==='youtube')iframeSrc=''; // YouTube uses video ID from API, handled by openPlayer()
+      else iframeSrc='';
+      return `<div class="embed-wrap">${iframeSrc?`<iframe src="${iframeSrc}" allowfullscreen></iframe>`:`<div class="embed-placeholder"><span>📺</span><span>${PLAT_L[plat]} — ${c.name}</span><span style="font-size:.65rem;margin-top:.3rem">Abra direto: <a href="${link}" target="_blank" style="color:var(--gold3)">${link}</a></span></div>`}</div>`;
+    }).join('')+`</div>`;
+  } else {
+    embedsHtml=`<div class="embed-placeholder" style="aspect-ratio:16/9;border-radius:var(--rs);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;background:var(--surface2);color:#3c3660;font-family:var(--mono);font-size:.72rem"><span style="font-size:2rem;opacity:.3">📺</span>Streamer offline no momento</div>`;
+  }
+
+  // live history
+  const lhStream=liveHist.filter(h=>h.streamerId===s.id).slice(0,6);
+  const lhHtml=lhStream.length?lhStream.map(h=>`<div class="lh-item"><div class="lh-cat-ico">${CICO[h.cat]||'🎬'}</div><div class="lh-info"><div class="lh-char">${h.char}</div><div class="lh-meta">${h.date} · ${h.duration}</div></div></div>`).join(''):`<p style="color:#2e2a4a;font-size:.78rem">Nenhum histórico ainda.</p>`;
+
+  // profile events (streamer events)
+  const sevents=events.filter(ev=>ev.streamerId===s.id||!ev.streamerId).slice(0,3);
+  const sevHtml=sevents.map(ev=>`<div class="prv-event"><div class="prv-ev-title">${ev.title}<span class="ebadge ${ev.status==='live'?'':'up'}">${ev.status==='live'?'AO VIVO':'Em breve'}</span></div><div class="prv-ev-desc">${ev.desc}</div><div class="prv-ev-time">📅 ${ev.date}</div></div>`).join('')||`<p style="color:#2e2a4a;font-size:.78rem">Sem eventos.</p>`;
+
+  const accessNum=(accessCounts[s.id]||s.views||0).toLocaleString('pt-BR');
+
+  pc.innerHTML=`
+  <div class="profile-hero">
+    ${bannerHtml}
+    <div class="profile-overlay"></div>
+    <div class="profile-info">
+      <div class="profile-avatar">${avatarHtml}</div>
+      <div class="profile-meta">
+        <div class="profile-name" style="--profile-accent:${accent}">${s.name}</div>
+        <div class="profile-badges">${badges}</div>
+        ${s.bio?`<div style="font-family:var(--body);font-style:italic;font-size:.85rem;color:#5a5070;margin-top:.3rem">${s.bio}</div>`:''}
+        <div class="profile-stats-row">
+          <div class="pstat"><span class="pstat-n">${totalL}</span><span class="pstat-l">Lives</span></div>
+          <div class="pstat"><span class="pstat-n">${(s.views||0).toLocaleString('pt-BR')}</span><span class="pstat-l">Views</span></div>
+          <div class="pstat"><span class="pstat-n">${s.chars.length}</span><span class="pstat-l">Personagens</span></div>
+          <div class="pstat"><span class="pstat-n" style="color:var(--live2)">${liveChars.length}</span><span class="pstat-l">Ao vivo</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="profile-body">
+    <div class="profile-left">
+      <!-- live / embed -->
+      <div class="panel">
+        <div class="panel-head">
+          <span>📺 ${live?'AO VIVO AGORA':'Canal'}</span>
+          ${live?`<span style="font-family:var(--mono);font-size:.6rem;color:var(--live2);animation:blink 1.5s step-start infinite">● LIVE</span>`:''}
+        </div>
+        <div class="panel-body">${embedsHtml}</div>
+      </div>
+      <!-- links -->
+      <div class="panel">
+        <div class="panel-head"><span>🔗 Links & Plataformas</span></div>
+        <div class="panel-body">
+          <div class="plat-links" style="margin-bottom:.8rem">${platBtns}</div>
+          ${socialBtns?`<div class="social-row">${socialBtns}</div>`:''}
+        </div>
+      </div>
+      <!-- chars -->
+      <div class="panel">
+        <div class="panel-head"><span>🎭 Personagens</span><span style="font-family:var(--mono);font-size:.6rem;color:#4a4060">${s.chars.length} total</span></div>
+        <div class="panel-body"><div class="chars-grid">${charsHtml}</div></div>
+      </div>
+      <!-- events -->
+      <div class="panel">
+        <div class="panel-head"><span>📅 Eventos & Interações</span></div>
+        <div class="panel-body">${sevHtml}</div>
+      </div>
+      <!-- live history -->
+      <div class="panel">
+        <div class="panel-head"><span>🎬 Histórico de Lives</span></div>
+        <div class="panel-body">${lhHtml}</div>
+      </div>
+    </div>
+    <div class="profile-right">
+      <!-- access counter -->
+      <div class="panel">
+        <div class="panel-head"><span>👁 Acessos à Página</span></div>
+        <div class="panel-body">
+          <div class="access-box">
+            <div class="access-num">${accessNum}</div>
+            <div class="access-lbl">Visualizações totais</div>
+          </div>
+        </div>
+      </div>
+      <!-- notification subscribe -->
+      <div class="panel">
+        <div class="panel-head"><span>🔔 Notificações</span></div>
+        <div class="panel-body">
+          <p style="font-size:.82rem;color:#5a5070;margin-bottom:.7rem">Receba um alerta quando ${s.name} entrar ao vivo.</p>
+          <button class="btn-g" style="width:100%;padding:.52rem;font-size:.72rem" onclick="subscribeStreamer(${s.id})">Ativar alertas de live</button>
+        </div>
+      </div>
+      <!-- chat -->
+      <div class="panel">
+        <div class="panel-head"><span>💬 Chat da Página</span></div>
+        <div class="chat-username"><span style="color:#4a4060;letter-spacing:.08em;font-size:.6rem">NICK: </span><input type="text" id="chatNick" placeholder="seu_nick" maxlength="20"/></div>
+        <div class="chat-box">
+          <div class="chat-messages" id="chatMessages${s.id}"></div>
+          <div class="chat-input-row">
+            <input type="text" class="chat-input" id="chatIn${s.id}" placeholder="Mensagem…" maxlength="200" onkeydown="if(event.key==='Enter')sendChat(${s.id})"/>
+            <button class="chat-send" onclick="sendChat(${s.id})">Enviar</button>
+          </div>
+        </div>
+      </div>
+      <!-- multi-live quick add -->
+      <div class="panel">
+        <div class="panel-head"><span>📺 Multi-Live</span></div>
+        <div class="panel-body">
+          <p style="font-size:.82rem;color:#5a5070;margin-bottom:.7rem">Adicione este streamer ao Multi-Live.</p>
+          <button class="btn-ghost" style="width:100%;padding:.52rem;font-size:.72rem" onclick="quickAddML(${s.id})">+ Adicionar ao Multi-Live</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+  // init chat
+  const chatKey='cda_chat_'+s.id;
+  const msgs=gl(chatKey,[]);
+  const cmEl=document.getElementById('chatMessages'+s.id);
+  if(cmEl){msgs.slice(-30).forEach(m=>appendChatMsg(s.id,m));cmEl.scrollTop=cmEl.scrollHeight}
+}
+
+// ── CHAT ──
+function sendChat(sid){
+  const inp=document.getElementById('chatIn'+sid);if(!inp)return;
+  const text=inp.value.trim();if(!text)return;
+  const nick=document.getElementById('chatNick')?.value.trim()||'Visitante';
+  const msg={nick,text,ts:Date.now(),role:'user'};
+  inp.value='';
+  appendChatMsg(sid,msg);
+  const chatKey='cda_chat_'+sid;
+  const msgs=gl(chatKey,[]);msgs.push(msg);if(msgs.length>200)msgs.splice(0,msgs.length-200);
+  sl(chatKey,msgs);
+}
+function appendChatMsg(sid,m){
+  const el=document.getElementById('chatMessages'+sid);if(!el)return;
+  const div=document.createElement('div');div.className='chat-msg'+(m.role==='system'?' system':'');
+  div.innerHTML=m.role==='system'?`<span class="cm-text">${m.text}</span>`:`<span class="cm-name ${m.role||'user'}">${m.nick}</span><span class="cm-text">${m.text}</span>`;
+  el.appendChild(div);el.scrollTop=el.scrollHeight;
+}
+
+// ══════════════════════════════════════════
+// NOTIFICATIONS
+// ══════════════════════════════════════════
+function pushNotif(ico,html){
+  notifs.unshift({id:nid(),ico,html,ts:Date.now(),read:false});
+  if(notifs.length>50)notifs.length=50;
+  sl(KEYS.notif,notifs);renderNotifBadge();
+}
+function renderNotifBadge(){
+  const unread=notifs.filter(n=>!n.read).length;
+  const badge=document.getElementById('notifBadge');
+  if(badge){badge.textContent=unread;badge.classList.toggle('show',unread>0)}
+  document.getElementById('notifCount').textContent=notifs.length;
+}
+function renderNotifPanel(){
+  const list=document.getElementById('notifList');
+  if(!notifs.length){list.innerHTML=`<div class="notif-empty">Nenhuma notificação.</div>`;return}
+  list.innerHTML=notifs.slice(0,15).map(n=>`<div class="notif-item${n.read?'':' unread'}" onclick="markNotifRead(${n.id})"><div class="ni-ico">${n.ico}</div><div><div class="ni-txt">${n.html}</div><div class="ni-t">${timeAgo(n.ts)}</div></div></div>`).join('');
+}
+function markNotifRead(id){const n=notifs.find(x=>x.id===id);if(n)n.read=true;sl(KEYS.notif,notifs);renderNotifBadge();renderNotifPanel()}
+function clearNotifs(){notifs=[];sl(KEYS.notif,notifs);renderNotifBadge();renderNotifPanel()}
+function toggleSub(){subEnabled=!subEnabled;sl(KEYS.sub,subEnabled);const btn=document.getElementById('subToggle');if(btn){btn.textContent=subEnabled?'Ativado':'Ativar';btn.classList.toggle('on',subEnabled)};showToast(subEnabled?'🔔 Alertas ativados!':'🔕 Alertas desativados.')}
+function subscribeStreamer(sid){if(!subEnabled){subEnabled=true;sl(KEYS.sub,true);const btn=document.getElementById('subToggle');if(btn){btn.textContent='Ativado';btn.classList.add('on')}};showToast('🔔 Você será notificado!')}
+
+document.getElementById('notifBtn').addEventListener('click',()=>{
+  const p=document.getElementById('notifPanel');p.classList.toggle('open');
+  if(p.classList.contains('open'))renderNotifPanel();
+});
+document.addEventListener('click',e=>{if(!document.getElementById('notifPanel').contains(e.target)&&!document.getElementById('notifBtn').contains(e.target))document.getElementById('notifPanel').classList.remove('open')});
+
+// ══════════════════════════════════════════
+// MULTI-LIVE
+// ══════════════════════════════════════════
+function renderML(){
+  const sel=document.getElementById('mlStreamerSel');
+  sel.innerHTML='<option value="">— Selecionar Streamer —</option>'+streamers.map(s=>`<option value="${s.id}">${s.name}${isLive(s)?' 🔴':''}</option>`).join('');
+  sel.addEventListener('change',()=>{
+    const s=streamers.find(x=>x.id===parseInt(sel.value));
+    const ps=document.getElementById('mlPlatSel');
+    ps.innerHTML='<option value="">— Plataforma —</option>'+(s?s.platforms.map(p=>`<option value="${p}">${PLAT_L[p]}</option>`).join(''):'');
+  });
+  drawMLSlots();
+}
+function addMLSlot(){
+  const sid=parseInt(document.getElementById('mlStreamerSel').value);
+  const plat=document.getElementById('mlPlatSel').value;
+  if(!sid||!plat){showToast('Selecione streamer e plataforma!');return}
+  if(mlSlots.length>=4){showToast('Máximo de 4 telas!');return}
+  const s=streamers.find(x=>x.id===sid);if(!s)return;
+  mlSlots.push({sid,plat,name:s.name,link:s.links[plat]||'#'});
+  drawMLSlots();
+}
+function removeMLSlot(i){mlSlots.splice(i,1);drawMLSlots()}
+function clearMLSlots(){mlSlots=[];drawMLSlots()}
+function updateMLLayout(){drawMLSlots()}
+function quickAddML(sid){
+  const s=streamers.find(x=>x.id===sid);if(!s)return;
+  const plat=s.platforms[0];
+  if(mlSlots.length>=4){showToast('Multi-live já tem 4 telas!');return}
+  mlSlots.push({sid,plat,name:s.name,link:s.links[plat]||'#'});
+  showPage('multilive');
+}
+function drawMLSlots(){
+  const cols=parseInt(document.getElementById('mlLayout')?.value||2);
+  const cont=document.getElementById('mlEmbeds');
+  cont.className='ml-embeds c'+Math.min(cols,mlSlots.length||1);
+  cont.innerHTML=mlSlots.map((sl2,i)=>{
+    const chanName=sl2.link.split('/').filter(Boolean).pop()||'channel';
+    let iframeSrc='';
+    if(sl2.plat==='twitch')iframeSrc=`https://player.twitch.tv/?channel=${chanName}&parent=${location.hostname}`;
+    else if(sl2.plat==='youtube')iframeSrc=''; // YouTube needs video ID — use openPlayer() instead
+    return `<div class="ml-slot">
+      <div class="ml-slot-label"><span>${sl2.name} · ${PLAT_L[sl2.plat]}</span><button class="ml-remove" onclick="removeMLSlot(${i})">✕</button></div>
+      ${iframeSrc?`<iframe src="${iframeSrc}" allowfullscreen></iframe>`:`<div class="ml-slot-empty"><span style="font-size:1.5rem;opacity:.3">📺</span><span>${sl2.name}</span><a href="${sl2.link}" target="_blank" style="color:var(--gold3);font-size:.62rem">${PLAT_L[sl2.plat]} →</a></div>`}
+    </div>`;
+  }).join('')||(cols>0?`<div class="ml-slot"><div class="ml-slot-empty"><span style="font-size:2rem;opacity:.2">📺</span><span>Selecione streamers acima</span></div></div>`.repeat(Math.min(cols,2)):'');
+}
+
+// ══════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════
+function renderDashboard(){
+  const liveCount=streamers.filter(isLive).length;
+  const totViews=totalViews();const totLives=totalLives();const totStreamers=streamers.length;
+  const cards=[
+    {ico:'🔴',val:liveCount,lbl:'Streamers Ao Vivo',dc:'live',trend:`+${liveCount} agora`},
+    {ico:'👼',val:totStreamers,lbl:'Total de Streamers',dc:'gold',trend:`${totalChars()} personagens`},
+    {ico:'👁',val:totViews.toLocaleString('pt-BR'),lbl:'Views Totais',dc:'blue',trend:'acumulado'},
+    {ico:'🎬',val:totLives,lbl:'Lives Realizadas',dc:'green',trend:'histórico total'},
+    {ico:'⏱',val:streamers.reduce((a,s)=>a+(s.totalLiveTime||0),0)+'h',lbl:'Horas Transmitidas',dc:'purple',trend:'estimado'},
+    {ico:'✦',val:streamers.filter(s=>s.partner).length,lbl:'Parceiros',dc:'gold',trend:'verificados'},
+  ];
+  document.getElementById('dashCards').innerHTML=cards.map(c=>`
+    <div class="dash-card" data-dc="${c.dc}">
+      <span class="dc-icon">${c.ico}</span>
+      <div class="dc-val">${c.val}</div>
+      <div class="dc-lbl">${c.lbl}</div>
+      <div class="dc-trend up">${c.trend}</div>
+    </div>`).join('');
+
+  // bar chart (live count per streamer)
+  const top6=[...streamers].sort((a,b)=>score(b)-score(a)).slice(0,6);
+  const maxV=Math.max(...top6.map(s=>s.chars.reduce((a,c)=>a+c.liveCount,0)),1);
+  const bars=top6.map(s=>{const v=s.chars.reduce((a,c)=>a+c.liveCount,0);const pct=Math.round(v/maxV*90);return{name:s.name,v,pct}});
+
+  document.getElementById('dashCharts').innerHTML=`
+  <div class="chart-area">
+    <div class="chart-title">Lives por Streamer</div>
+    <div class="bar-chart">${bars.map(b=>`<div class="bar" style="height:${b.pct}%"><div class="bar-tooltip">${b.v} lives</div></div>`).join('')}</div>
+    <div class="bar-labels">${bars.map(b=>`<div class="bl">${b.name}</div>`).join('')}</div>
+  </div>
+  <div class="chart-area">
+    <div class="chart-title">Views por Streamer</div>
+    <div class="bar-chart">${top6.map(s=>{const v=s.views||0;const maxVv=Math.max(...top6.map(x=>x.views||0),1);const pct=Math.round(v/maxVv*90);return`<div class="bar" style="height:${pct}%;background:linear-gradient(to top,var(--police-b),rgba(96,165,250,.3))"><div class="bar-tooltip">${v.toLocaleString('pt-BR')} views</div></div>`}).join('')}</div>
+    <div class="bar-labels">${top6.map(s=>`<div class="bl">${s.name}</div>`).join('')}</div>
+  </div>`;
+
+  document.getElementById('topTable').innerHTML=`
+  <thead><tr><th>#</th><th>Streamer</th><th>Personagens</th><th>Lives</th><th>Views</th><th>Pontuação</th><th>Status</th></tr></thead>
+  <tbody>${[...streamers].sort((a,b)=>score(b)-score(a)).map((s,i)=>`
+    <tr style="cursor:pointer" onclick="openProfile(${s.id})">
+      <td style="color:var(--gold3);font-family:var(--head)">${i+1}</td>
+      <td style="color:var(--cream);font-family:var(--head);letter-spacing:.05em">${s.name}</td>
+      <td>${s.chars.length}</td>
+      <td>${s.chars.reduce((a,c)=>a+c.liveCount,0)}</td>
+      <td>${(s.views||0).toLocaleString('pt-BR')}</td>
+      <td style="color:var(--gold3);font-family:var(--mono)">${Math.round(score(s)).toLocaleString('pt-BR')}</td>
+      <td>${isLive(s)?'<span style="color:var(--live2);font-family:var(--mono);font-size:.65rem">● AO VIVO</span>':'<span style="color:#3c3660;font-family:var(--mono);font-size:.65rem">offline</span>'}</td>
+    </tr>`).join('')}
+  </tbody>`;
+}
+
+// ══════════════════════════════════════════
+// SEARCH
+// ══════════════════════════════════════════
+const sIn=document.getElementById('searchInput'),sdropEl=document.getElementById('sdrop');
+sIn.addEventListener('input',()=>{
+  const q=sIn.value.trim().toLowerCase();
+  if(!q){sdropEl.classList.remove('open');renderGrid();return}
+  const res=[];
+  streamers.forEach(s=>{
+    if(s.name.toLowerCase().includes(q))res.push({s,c:null});
+    s.chars.forEach(c=>{if(c.name.toLowerCase().includes(q)&&!res.find(r=>r.s.id===s.id))res.push({s,c})});
+  });
+  sdropEl.innerHTML=res.length?res.slice(0,8).map(r=>`
+    <div class="sdrop-item" data-id="${r.s.id}">
+      ${isLive(r.s)?'<div class="ldot"></div>':''}
+      <div>
+        <div class="sdrop-char">${r.c?r.c.name:r.s.name}</div>
+        <div class="sdrop-info">${r.c?r.s.name+' · '+CAT[r.c.cat]:r.s.platforms.join(', ')}</div>
+      </div>
+    </div>`).join(''):`<div class="sdrop-item" style="color:#2e2a4a">Nenhum resultado</div>`;
+  sdropEl.classList.add('open');
+  // filter grid inline
+  const filtIds=res.map(r=>r.s.id);
+  document.getElementById('liveGrid').innerHTML='';document.getElementById('liveLbl').style.display='none';
+  document.getElementById('allLbl').textContent=`Resultados para "${sIn.value}"`;
+  const ag=document.getElementById('allGrid');ag.innerHTML='';
+  streamers.filter(s=>filtIds.includes(s.id)).forEach((s,i)=>{const c=buildCard(s);c.style.animationDelay=i*35+'ms';ag.appendChild(c)});
+  if(!filtIds.length)ag.innerHTML=`<div class="empty-st"><span class="empty-ico">✦</span>Nenhum resultado.</div>`;
+});
+sdropEl.addEventListener('click',e=>{const it=e.target.closest('[data-id]');if(!it)return;sIn.value='';sdropEl.classList.remove('open');openProfile(parseInt(it.dataset.id))});
+document.addEventListener('click',e=>{if(!sIn.contains(e.target)&&!sdropEl.contains(e.target))sdropEl.classList.remove('open')});
+
+// ── FILTER PILLS ──
+document.getElementById('fpbar').addEventListener('click',e=>{
+  const b=e.target.closest('.fp');if(!b)return;
+  document.querySelectorAll('.fp').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');activeFilter=b.dataset.f;
+  sIn.value='';sdropEl.classList.remove('open');
+  if(document.getElementById('page-home').classList.contains('active'))renderGrid();
+});
+
+// ══════════════════════════════════════════
+// CONTEXT MENU
+// ══════════════════════════════════════════
+const ctxEl=document.getElementById('ctxMenu');
+function openCtx(e,id){
+  ctxId=id;
+  ctxEl.style.left=Math.min(e.clientX,window.innerWidth-180)+'px';
+  ctxEl.style.top=Math.min(e.clientY,window.innerHeight-130)+'px';
+  ctxEl.style.display='block';
+}
+document.addEventListener('click',()=>ctxEl.style.display='none');
+document.querySelectorAll('.ctx-item').forEach(el=>el.addEventListener('mouseenter',()=>el.style.background='rgba(201,168,76,.06)'));
+document.querySelectorAll('.ctx-item').forEach(el=>el.addEventListener('mouseleave',()=>el.style.background=''));
+document.getElementById('ctxProfile').onclick=()=>{if(ctxId)openProfile(ctxId)};
+document.getElementById('ctxEdit').onclick=()=>{const s=streamers.find(x=>x.id===ctxId);if(!s)return;ensureAdmin(()=>{openAdmin();switchAptab('add');fillForm(s)})};
+document.getElementById('ctxToggleLive').onclick=()=>{
+  const s=streamers.find(x=>x.id===ctxId);if(!s)return;
+  const ac=activeChar(s);if(!ac)return;
+  ac.live=!ac.live;if(ac.live){ac.liveCount++;addLH(s,ac);if(subEnabled)pushNotif('🔴',`<strong>${s.name}</strong> entrou ao vivo como <em>${ac.name}</em>!`)}
+  saveAll();renderHome();showToast(ac.live?`${s.name} ao vivo! 🔴`:`${ac.name} offline.`);
+};
+document.getElementById('ctxDel').onclick=()=>{
+  const s=streamers.find(x=>x.id===ctxId);if(!s||!confirm(`Remover ${s.name}?`))return;
+  streamers=streamers.filter(x=>x.id!==ctxId);saveAll();renderHome();showToast('Removido.');
+};
+function addLH(s,c){liveHist.unshift({id:nid(),streamerId:s.id,streamer:s.name,char:c.name,cat:c.cat,date:'Hoje',duration:'—'});if(liveHist.length>100)liveHist.length=100}
+
+// ══════════════════════════════════════════
+// ADMIN AUTH
+// ══════════════════════════════════════════
+function ensureAdmin(fn){if(adminUnlocked){fn();return}pendingFn=fn;document.getElementById('loginOv').classList.add('open');document.getElementById('pwIn').value='';setTimeout(()=>document.getElementById('pwIn').focus(),100)}
+function closeLogin(){document.getElementById('loginOv').classList.remove('open');pendingFn=null}
+function doLogin(){if(document.getElementById('pwIn').value===getPw()){document.getElementById('loginOv').classList.remove('open');adminUnlocked=true;if(pendingFn){pendingFn();pendingFn=null}}else{showToast('❌ Senha incorreta!');document.getElementById('pwIn').value=''}}
+document.getElementById('pwIn').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+document.getElementById('adminBtn').onclick=()=>ensureAdmin(openAdmin);
+
+function openAdmin(){
+  document.getElementById('adminPanel').classList.add('open');
+  document.getElementById('backdrop').classList.add('open');
+  switchAptab('streamers');
+  setTimeout(showQuickBarIfNeeded, 150);
+}
+function closeAdmin(){document.getElementById('adminPanel').classList.remove('open');document.getElementById('backdrop').classList.remove('open')}
+document.getElementById('backdrop').onclick=closeAdmin;
+
+// ══════════════════════════════════════════
+// ADMIN TABS
+// ══════════════════════════════════════════
+const tabFns={streamers:renderAdminStreamers,add:renderAdminAdd,chars:renderAdminChars,content:renderAdminContent,settings:renderAdminSettings};
+function switchAptab(name){document.querySelectorAll('.aptab').forEach(t=>t.classList.toggle('active',t.dataset.t===name));(tabFns[name]||(() => {}))()}
+document.querySelectorAll('.aptab').forEach(t=>t.addEventListener('click',()=>switchAptab(t.dataset.t)));
+
+// ── TAB: STREAMERS ──
+function renderAdminStreamers(){
+  const pb=document.getElementById('apBody');
+  pb.innerHTML=`<div class="slist">${streamers.length?streamers.map(s=>`
+    <div class="sitem">
+      <div class="lind ${isLive(s)?'on':''}"></div>
+      <div class="sitem-info">
+        <div class="sitem-name">${s.name}${s.partner?' <span style="color:var(--gold3);font-size:.6em">✦</span>':''}</div>
+        <div class="sitem-sub">${s.chars.map(c=>(c.live?'🔴 ':'')+c.name).join(' · ')||'sem personagens'}</div>
+      </div>
+      <div class="sitem-acts">
+        <button class="sia" onclick="aEdit(${s.id})">✏️</button>
+        <button class="sia del" onclick="aDel(${s.id})">🗑</button>
+      </div>
+    </div>`).join(''):'<p style="color:#2e2a4a;font-family:var(--mono);font-size:.75rem;text-align:center;padding:2rem">Nenhum streamer.</p>'}</div>`;
+}
+function aEdit(id){const s=streamers.find(x=>x.id===id);if(!s)return;switchAptab('add');fillForm(s)}
+function aDel(id){const s=streamers.find(x=>x.id===id);if(!s||!confirm(`Remover ${s.name}?`))return;streamers=streamers.filter(x=>x.id!==id);saveAll();renderAdminStreamers();renderHome();showToast('Removido.')}
+
+// ── TAB: ADD / EDIT STREAMER ──
+function renderAdminAdd(){
+  const pb=document.getElementById('apBody');
+  pb.innerHTML=`
+  <div class="fsec">
+    <div class="fstitle">👤 Streamer</div>
+    <div class="frow"><div class="fg"><label>Nome</label><input id="fN" placeholder="Nome do streamer"/></div><div class="fg"><label>Avatar URL</label><input id="fAv" placeholder="https://…"/></div></div>
+    <div class="fg"><label>Banner URL</label><input id="fBan" placeholder="https://… (imagem larga)"/></div>
+    <div class="fg"><label>Bio</label><textarea id="fBio" placeholder="Descrição curta do streamer…"></textarea></div>
+    <div class="fg"><label>Plataformas</label><div class="pchecks">
+      <label><input type="checkbox" id="pTw"/> Twitch</label>
+      <label><input type="checkbox" id="pKi"/> Kick</label>
+      <label><input type="checkbox" id="pYT"/> YouTube</label>
+    </div></div>
+    <div id="grpTw" style="display:none" class="fg"><label>Link Twitch</label><input id="fTw" placeholder="https://twitch.tv/…"/></div>
+    <div id="grpKi" style="display:none" class="fg"><label>Link Kick</label><input id="fKi" placeholder="https://kick.com/…"/></div>
+    <div id="grpYT" style="display:none" class="fg"><label>Link YouTube</label><input id="fYT2" placeholder="https://youtube.com/@…"/></div>
+  </div>
+  <div class="fsec">
+    <div class="fstitle">🎭 Personagens <span style="color:#4a4060;font-size:.8em;font-family:var(--mono);letter-spacing:0;text-transform:none">(adicione ao menos 1)</span></div>
+    <div id="formCharsList"></div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:.8rem;margin-top:.6rem">
+      <div class="frow">
+        <div class="fg"><label>Nome do personagem</label><input id="ncN" placeholder="Ex: João Silva"/></div>
+        <div class="fg"><label>Categoria</label>
+          <select id="ncC">
+            <option value="civilian">Civil</option>
+            <option value="police">Polícia</option>
+            <option value="criminal">Crime</option>
+            <option value="medic">Médico</option>
+            <option value="mechanic">Mecânico</option>
+            <option value="governo">Governo</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg"><label>Plataforma ativa deste personagem</label>
+        <select id="ncP"><option value="twitch">Twitch</option><option value="kick">Kick</option><option value="youtube">YouTube</option></select>
+      </div>
+      <button class="btn-g" style="width:100%;padding:.48rem;font-size:.74rem" onclick="addFormChar()">+ Adicionar Personagem</button>
+    </div>
+  </div>
+  <div class="fsec">
+    <div class="fstitle">🔗 Redes Sociais</div>
+    <div class="fg"><label>Discord (link convite)</label><input id="fDis" placeholder="https://discord.gg/…"/></div>
+    <div class="fg"><label>Instagram</label><input id="fIg" placeholder="https://instagram.com/…"/></div>
+    <div class="fg"><label>Twitter/X</label><input id="fTw2" placeholder="https://x.com/…"/></div>
+  </div>
+  <div class="fsec">
+    <div class="fstitle">🎨 Visual da Página</div>
+    <div class="fg"><label>Cor de Destaque</label>
+      <div class="color-row">
+        ${['#c9a84c','#f87171','#60a5fa','#4ade80','#a78bfa','#fb923c','#f472b6','#ffffff'].map(c=>`<div class="color-swatch" style="background:${c}" data-color="${c}" onclick="pickColor('${c}',this)"></div>`).join('')}
+        <input type="color" id="fColor" value="#c9a84c" style="background:transparent;border:1px solid var(--border);border-radius:4px;width:32px;height:28px;cursor:pointer" oninput="syncColor(this.value)"/>
+      </div>
+    </div>
+  </div>
+  <div class="fsec">
+    <div class="fstitle">⚙️ Opções</div>
+    <div class="tsrow" onclick="tsToggle('swP')"><span class="tslbl">✦ Parceiro do site</span><div class="tsw" id="swP"></div></div>
+    <div class="tsrow" onclick="tsToggle('swF')"><span class="tslbl">⭐ Streamer em destaque</span><div class="tsw" id="swF"></div></div>
+  </div>
+  <div class="facts"><button class="btn-ghost" onclick="clearForm()">Limpar</button><button class="btn-g" onclick="saveForm()">Salvar</button></div>
+  <p id="editingLbl" style="font-family:var(--mono);font-size:.6rem;color:#3a3260;margin-top:.6rem;text-align:center"></p>`;
+  ['pTw','pKi','pYT'].forEach(id=>document.getElementById(id)?.addEventListener('change',upPlatFields));
+  renderFormCharsList();
+  if(editId){const s=streamers.find(x=>x.id===editId);if(s)fillFormFields(s)}
+}
+
+function renderFormCharsList(){
+  const el=document.getElementById('formCharsList');if(!el)return;
+  if(!formChars.length){
+    el.innerHTML=`<p style="color:#3a3260;font-family:var(--mono);font-size:.68rem;padding:.4rem 0 .6rem">Nenhum personagem ainda — adicione abaixo.</p>`;
+    return;
+  }
+  el.innerHTML=`<div class="crows">${formChars.map(c=>`
+    <div class="crow">
+      <div class="crow-info">
+        <div class="crow-name">${c.name}</div>
+        <div class="crow-cat">${CICO[c.cat]||'👤'} ${CAT[c.cat]||c.cat} · ${c.activePlat||'twitch'}</div>
+      </div>
+      <div class="crow-acts">
+        <button class="cra live-toggle ${c.live?'on':''}" onclick="toggleFormChar(${c.id})" title="Marcar ao vivo">${c.live?'🔴':'⭕'}</button>
+        <button class="cra del" onclick="removeFormChar(${c.id})">✕</button>
+      </div>
+    </div>`).join('')}</div>`;
+}
+
+function addFormChar(){
+  const name=document.getElementById('ncN')?.value.trim();
+  if(!name){showToast('Digite o nome do personagem!');return}
+  const cat=document.getElementById('ncC')?.value||'civilian';
+  const plat=document.getElementById('ncP')?.value||'twitch';
+  formChars.push({id:nid(),name,cat,live:false,liveCount:0,activePlat:plat,activeChar:formChars.length===0});
+  document.getElementById('ncN').value='';
+  renderFormCharsList();
+  showToast(`Personagem "${name}" adicionado!`);
+}
+
+function toggleFormChar(cid){
+  const c=formChars.find(x=>x.id===cid);if(!c)return;
+  c.live=!c.live;renderFormCharsList();
+}
+
+function removeFormChar(cid){
+  formChars=formChars.filter(c=>c.id!==cid);renderFormCharsList();
+}
+function tsToggle(id){const el=document.getElementById(id);if(el)el.classList.toggle('on')}
+function pickColor(c,el){document.querySelectorAll('.color-swatch').forEach(s=>s.classList.remove('active'));el.classList.add('active');const inp=document.getElementById('fColor');if(inp)inp.value=c}
+function syncColor(c){document.querySelectorAll('.color-swatch').forEach(s=>s.classList.toggle('active',s.dataset.color===c))}
+function upPlatFields(){
+  const t=v('pTw'),k=v('pKi'),y=v('pYT');
+  gs('grpTw',t?'':'none');gs('grpKi',k?'':'none');gs('grpYT',y?'':'none');
+}
+function v(id){const e=document.getElementById(id);return e?.checked||e?.value||''}
+function gs(id,d){const e=document.getElementById(id);if(e)e.style.display=d}
+function gi(id){const e=document.getElementById(id);return(e?.value||'').trim()}
+function gcheck(id){return!!document.getElementById(id)?.checked}
+function gswitch(id){return!!document.getElementById(id)?.classList.contains('on')}
+
+function fillForm(s){
+  editId=s.id;
+  formChars=s.chars.map(c=>({...c}));
+  renderAdminAdd();
+  fillFormFields(s);
+}
+function fillFormFields(s){
+  const set=(id,val)=>{const e=document.getElementById(id);if(e)e.value=val||''};
+  set('fN',s.name);set('fAv',s.avatar);set('fBan',s.banner);set('fBio',s.bio);
+  set('fTw',s.links.twitch);set('fKi',s.links.kick);set('fYT2',s.links.youtube);
+  set('fDis',s.socials?.discord);set('fIg',s.socials?.instagram);set('fTw2',s.socials?.twitter);
+  set('fColor',s.accent||'#c9a84c');
+  const chk=(id,val)=>{const e=document.getElementById(id);if(e)e.checked=!!val};
+  chk('pTw',s.platforms.includes('twitch'));
+  chk('pKi',s.platforms.includes('kick'));
+  chk('pYT',s.platforms.includes('youtube'));
+  const sw=(id,val)=>{const e=document.getElementById(id);if(e)e.classList.toggle('on',!!val)};
+  sw('swP',s.partner);sw('swF',s.featured);
+  upPlatFields();
+  renderFormCharsList();
+  const lbl=document.getElementById('editingLbl');
+  if(lbl)lbl.textContent=`Editando: ${s.name}`;
+}
+function clearForm(){editId=null;formChars=[];renderAdminAdd()}
+function saveForm(){
+  const name=gi('fN');
+  if(!name){showToast('Digite o nome do streamer!');return}
+  const plats=[],links={};
+  if(gcheck('pTw')){plats.push('twitch');links.twitch=gi('fTw')||'#'}
+  if(gcheck('pKi')){plats.push('kick');links.kick=gi('fKi')||'#'}
+  if(gcheck('pYT')){plats.push('youtube');links.youtube=gi('fYT2')||'#'}
+  if(!plats.length){showToast('Selecione pelo menos uma plataforma!');return}
+  if(!formChars.length){showToast('Adicione pelo menos 1 personagem!');return}
+  const existing=editId?streamers.find(x=>x.id===editId):null;
+  const entry={
+    id:editId||nid(),
+    name,
+    avatar:gi('fAv'),
+    banner:gi('fBan'),
+    bio:gi('fBio'),
+    platforms:plats,
+    links,
+    socials:{discord:gi('fDis'),instagram:gi('fIg'),twitter:gi('fTw2')},
+    accent:gi('fColor')||'#c9a84c',
+    partner:gswitch('swP'),
+    featured:gswitch('swF'),
+    chars:[...formChars],
+    activeCharId:formChars[0]?.id||null,
+    views:existing?.views||0,
+    totalLiveTime:existing?.totalLiveTime||0,
+  };
+  if(editId){
+    const i=streamers.findIndex(x=>x.id===editId);
+    if(i!==-1)streamers[i]=entry;
+    showToast(`${name} atualizado! ✨`);
+  } else {
+    streamers.push(entry);
+    pushNotif('👼',`<strong>${name}</strong> foi adicionado à cidade!`);
+    showToast(`${name} adicionado! 👼`);
+  }
+  saveAll();
+  renderHome();
+  clearForm();
+  switchAptab('streamers');
+}
+
+// ── TAB: CHARS ──
+function renderAdminChars(){
+  const pb=document.getElementById('apBody');
+  pb.innerHTML=`
+  <div class="fg"><label>Streamer</label>
+    <select id="charStreamerSel" onchange="renderCharList()">${streamers.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}</select>
+  </div>
+  <div id="charListWrap"></div>
+  <div style="margin-top:1rem;border:1px solid var(--border);border-radius:var(--rs);padding:.9rem;background:var(--surface2)">
+    <div class="fstitle">+ Novo Personagem</div>
+    <div class="frow">
+      <div class="fg"><label>Nome</label><input id="ncN" placeholder="Ex: João Silva"/></div>
+      <div class="fg"><label>Categoria</label><select id="ncC"><option value="civilian">Civil</option><option value="police">Polícia</option><option value="criminal">Crime</option><option value="medic">Médico</option><option value="mechanic">Mecânico</option><option value="governo">Governo</option></select></div>
+    </div>
+    <div class="fg"><label>Plataforma ativa</label><select id="ncP" style=""><option value="twitch">Twitch</option><option value="kick">Kick</option><option value="youtube">YouTube</option></select></div>
+    <button class="btn-g" style="width:100%;padding:.5rem;font-size:.74rem" onclick="addCharToStreamer()">Adicionar Personagem</button>
+  </div>`;
+  renderCharList();
+}
+function renderCharList(){
+  const sel=document.getElementById('charStreamerSel');if(!sel)return;
+  const sid=parseInt(sel.value);const s=streamers.find(x=>x.id===sid);
+  const wrap=document.getElementById('charListWrap');if(!wrap)return;
+  if(!s||!s.chars.length){wrap.innerHTML=`<p style="color:#2e2a4a;font-size:.78rem;padding:.5rem 0">Nenhum personagem.</p>`;return}
+  wrap.innerHTML=`<div class="crows" style="margin-top:.8rem">${s.chars.map(c=>`
+    <div class="crow">
+      <div class="crow-info">
+        <div class="crow-name">${c.name}</div>
+        <div class="crow-cat">${CICO[c.cat]} ${CAT[c.cat]} · ${c.liveCount} lives · ${c.activePlat||'twitch'}</div>
+      </div>
+      <div class="crow-acts">
+        <button class="cra live-toggle ${c.live?'on':''}" onclick="toggleCharLive(${sid},${c.id})" title="Toggle ao vivo">${c.live?'🔴':'⭕'}</button>
+        <button class="cra del" onclick="removeChar(${sid},${c.id})">✕</button>
+      </div>
+    </div>`).join('')}</div>`;
+}
+function toggleCharLive(sid,cid){
+  const s=streamers.find(x=>x.id===sid);if(!s)return;
+  const c=s.chars.find(x=>x.id===cid);if(!c)return;
+  c.live=!c.live;if(c.live){c.liveCount++;addLH(s,c);if(subEnabled)pushNotif('🔴',`<strong>${s.name}</strong> entrou ao vivo como <em>${c.name}</em>!`)}
+  if(c.live)s.activeCharId=cid;
+  saveAll();renderCharList();renderHome();showToast(c.live?`${c.name} AO VIVO! 🔴`:`${c.name} offline.`);
+}
+function removeChar(sid,cid){const s=streamers.find(x=>x.id===sid);if(!s)return;if(!confirm('Remover personagem?'))return;s.chars=s.chars.filter(c=>c.id!==cid);saveAll();renderCharList();showToast('Removido.')}
+function addCharToStreamer(){
+  const sel=document.getElementById('charStreamerSel');if(!sel)return;
+  const sid=parseInt(sel.value);const s=streamers.find(x=>x.id===sid);if(!s)return;
+  const name=document.getElementById('ncN')?.value.trim();if(!name){showToast('Digite o nome!');return}
+  s.chars.push({id:nid(),name,cat:document.getElementById('ncC')?.value||'civilian',live:false,liveCount:0,activePlat:document.getElementById('ncP')?.value||'twitch'});
+  if(!s.activeCharId)s.activeCharId=s.chars[0].id;
+  saveAll();renderCharList();renderHome();document.getElementById('ncN').value='';showToast('Personagem adicionado!');
+}
+
+// ── TAB: CHARS (manage chars of existing streamers) ──
+
+// ── TAB: CONTENT (news, events, notices) ──
+function renderAdminContent(){
+  const pb=document.getElementById('apBody');
+  pb.innerHTML=`
+  <!-- NEWS -->
+  <div class="fsec">
+    <div class="fstitle">📰 Nova Notícia</div>
+    <div class="fg"><label>Texto (HTML simples)</label><textarea id="nTxt" placeholder="Ex: &lt;strong&gt;Alerta:&lt;/strong&gt; Perseguição."></textarea></div>
+    <div class="frow"><div class="fg"><label>Tipo</label><select id="nTyp"><option value="info">Info</option><option value="event">Evento</option><option value="alert">Alerta</option><option value="update">Update</option></select></div><div class="fg"><label>Tempo</label><input id="nTm" placeholder="Há 5 min"/></div></div>
+    <button class="btn-g" style="width:100%;padding:.48rem;font-size:.72rem;margin-top:.3rem" onclick="addNews()">Publicar</button>
+    <div id="newsAdL" style="margin-top:.8rem"></div>
+  </div>
+  <!-- EVENTS -->
+  <div class="fsec">
+    <div class="fstitle">📅 Novo Evento</div>
+    <div class="fg"><label>Título</label><input id="evT" placeholder="Título do evento"/></div>
+    <div class="frow"><div class="fg"><label>Data/Hora</label><input id="evD" placeholder="Hoje, 20:00"/></div><div class="fg"><label>Status</label><select id="evS"><option value="upcoming">Em breve</option><option value="live">Ao Vivo</option></select></div></div>
+    <div class="fg"><label>Descrição</label><textarea id="evDesc"></textarea></div>
+    <button class="btn-g" style="width:100%;padding:.48rem;font-size:.72rem;margin-top:.3rem" onclick="addEvent()">Criar Evento</button>
+    <div id="evAdL" style="margin-top:.8rem"></div>
+  </div>
+  <!-- NOTICES -->
+  <div class="fsec">
+    <div class="fstitle">📣 Aviso de Streamer</div>
+    <div class="fg"><label>Streamer</label><select id="ncStr">${streamers.map(s=>`<option value="${s.name}">${s.name}</option>`).join('')}<option value="__c">Outro…</option></select></div>
+    <div class="fg" id="ncCw" style="display:none"><label>Nome custom</label><input id="ncCN" placeholder="Nome"/></div>
+    <div class="fg"><label>Mensagem</label><textarea id="ncTxt"></textarea></div>
+    <div class="fg"><label>Tempo</label><input id="ncTm" placeholder="Agora"/></div>
+    <button class="btn-g" style="width:100%;padding:.48rem;font-size:.72rem;margin-top:.3rem" onclick="addNotice()">Publicar Aviso</button>
+    <div id="ncAdL" style="margin-top:.8rem"></div>
+  </div>`;
+  document.getElementById('ncStr')?.addEventListener('change',()=>{gs('ncCw',document.getElementById('ncStr').value==='__c'?'':'none')});
+  renderContentLists();
+}
+function renderContentLists(){
+  const nAL=document.getElementById('newsAdL');
+  if(nAL)nAL.innerHTML='<div class="slist">'+news.map(n=>`<div class="sitem"><div class="sitem-info"><div class="sitem-name" style="font-size:.75rem;white-space:normal">${n.text.replace(/<[^>]+>/g,'').slice(0,60)}…</div><div class="sitem-sub">${n.time}</div></div><button class="sia del" onclick="delNews(${n.id})">🗑</button></div>`).join('')+'</div>';
+  const eAL=document.getElementById('evAdL');
+  if(eAL)eAL.innerHTML='<div class="slist">'+events.map(ev=>`<div class="sitem"><div class="sitem-info"><div class="sitem-name">${ev.title}</div><div class="sitem-sub">${ev.date}</div></div><button class="sia del" onclick="delEvent(${ev.id})">🗑</button></div>`).join('')+'</div>';
+  const ncAL=document.getElementById('ncAdL');
+  if(ncAL)ncAL.innerHTML='<div class="slist">'+notices.map(n=>`<div class="sitem"><div class="sitem-info"><div class="sitem-name">${n.streamer}</div><div class="sitem-sub" style="white-space:normal">${n.text.slice(0,60)}</div></div><button class="sia del" onclick="delNotice(${n.id})">🗑</button></div>`).join('')+'</div>';
+}
+function addNews(){const t=gi('nTxt');if(!t){showToast('Escreva a notícia!');return}news.unshift({id:nid(),type:gi('nTyp')||'info',text:t,time:gi('nTm')||'Agora'});if(news.length>50)news.length=50;saveAll();renderSidebar();renderContentLists();document.getElementById('nTxt').value='';showToast('Notícia publicada!')}
+function delNews(id){news=news.filter(n=>n.id!==id);saveAll();renderContentLists();renderSidebar()}
+function addEvent(){const t=gi('evT');if(!t){showToast('Digite o título!');return}events.unshift({id:nid(),title:t,date:gi('evD')||'A definir',desc:gi('evDesc')||'',status:gi('evS')||'upcoming'});saveAll();renderSidebar();renderContentLists();document.getElementById('evT').value='';showToast('Evento criado!')}
+function delEvent(id){events=events.filter(e=>e.id!==id);saveAll();renderContentLists();renderSidebar()}
+function addNotice(){const sv=document.getElementById('ncStr')?.value;const str=sv==='__c'?gi('ncCN'):sv;const txt=gi('ncTxt');if(!str||!txt){showToast('Preencha streamer e mensagem!');return}notices.unshift({id:nid(),streamer:str,text:txt,time:gi('ncTm')||'Agora'});if(notices.length>50)notices.length=50;saveAll();renderSidebar();renderContentLists();document.getElementById('ncTxt').value='';showToast('Aviso publicado!')}
+function delNotice(id){notices=notices.filter(n=>n.id!==id);saveAll();renderContentLists();renderSidebar()}
+
+// ── TAB: SETTINGS ──
+function renderAdminSettings(){
+  const opts=streamers.map(s=>`<option value="${s.id}"${s.id===sodId?' selected':''}>${s.name}</option>`).join('');
+  document.getElementById('apBody').innerHTML=`
+  <div class="fsec">
+    <div class="fstitle">👑 Personagem do Dia</div>
+    <div class="fg"><label>Streamer em destaque</label><select id="sodSel"><option value="">— Nenhum —</option>${opts}</select></div>
+    <button class="btn-g" style="width:100%;padding:.5rem" onclick="saveSod()">Salvar</button>
+  </div>
+  <div class="fsec">
+    <div class="fstitle">🔐 Alterar Senha</div>
+    <div class="fg"><label>Atual</label><input type="password" id="pwO" placeholder="••••••••"/></div>
+    <div class="fg"><label>Nova</label><input type="password" id="pwN" placeholder="••••••••"/></div>
+    <div class="fg"><label>Confirmar</label><input type="password" id="pwC" placeholder="••••••••"/></div>
+    <button class="btn-g" style="width:100%;padding:.5rem" onclick="savePw()">Salvar Senha</button>
+  </div>
+  <div class="fsec">
+    <div class="fstitle">💾 Exportar / Importar</div>
+    <div class="frow">
+      <button class="btn-ghost" style="flex:1;padding:.5rem" onclick="exportData()">📋 Exportar JSON</button>
+      <div class="fg" style="flex:1"><label>Importar JSON</label><input type="file" id="impF" accept=".json" style="background:transparent;border:1px dashed var(--border);color:#4a4060;font-size:.68rem;border-radius:4px;padding:.38rem"/></div>
+    </div>
+  </div>
+  <div class="fsec">
+    <div class="fstitle" style="color:var(--criminal-c)">⚠️ Perigo</div>
+    <button class="btn-danger" style="width:100%;padding:.55rem" onclick="clearAll()">🗑️ Remover todos</button>
+  </div>`;
+  document.getElementById('impF')?.addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(Array.isArray(d)){streamers=d;saveAll();renderHome();showToast('Importado!')}else showToast('Formato inválido!')}catch{showToast('JSON inválido!')}};r.readAsText(f);e.target.value=''});
+}
+function saveSod(){sodId=parseInt(document.getElementById('sodSel')?.value)||null;saveAll();renderSOD();showToast('Destaque salvo! 👑')}
+function savePw(){const o=gi('pwO'),n=gi('pwN'),c=gi('pwC');if(o!==getPw()){showToast('❌ Senha atual incorreta!');return}if(!n||n.length<4){showToast('Senha muito curta!');return}if(n!==c){showToast('❌ Senhas não coincidem!');return}setPw(n);showToast('Senha alterada! 🔐');['pwO','pwN','pwC'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=''})}
+function exportData(){const blob=new Blob([JSON.stringify(streamers,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cda_streamers.json';a.click();URL.revokeObjectURL(url);showToast('Exportado!')}
+function clearAll(){if(!confirm('Remover TODOS?'))return;streamers=[];saveAll();renderHome();renderAdminStreamers();showToast('Todos removidos.')}
+
+// ══════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════
+let toastT;
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2800)}
+
+// ══════════════════════════════════════════
+// AUTO LIVE CHECK
+// ══════════════════════════════════════════
+
+// ── YouTube Data API v3 key ──
+const YT_API_KEY = 'AIzaSyBAVkHxoTObv-gdIRH0pcmPhzt0AM7spew';
+
+async function checkTwitchLive(channelName){
+  // Probe the live thumbnail Twitch generates only for active streams
+  return new Promise(resolve=>{
+    const img=new Image();
+    img.onload=()=>resolve(img.naturalWidth>10 && img.naturalHeight>10);
+    img.onerror=()=>resolve(false);
+    img.src='https://static-cdn.jtvnw.net/previews-ttv/live_user_'+channelName.toLowerCase()+'-320x180.jpg?nocache='+Date.now();
+  });
+}
+
+async function checkKickLive(channelName){
+  try{
+    const res=await fetch('https://kick.com/api/v1/channels/'+channelName,{headers:{'Accept':'application/json'}});
+    if(!res.ok)return false;
+    const data=await res.json();
+    return !!(data&&data.livestream);
+  }catch(e){return false}
+}
+
+// Cache YouTube channel IDs to avoid extra API calls (username -> channelId)
+const _ytChannelIdCache = {};
+
+async function resolveYouTubeChannelId(nameOrUrl){
+  let handle = nameOrUrl;
+
+  // Strip URL to get handle/ID
+  try {
+    const u = new URL(nameOrUrl);
+    const parts = u.pathname.split('/').filter(Boolean);
+    if(parts[0] === 'channel' && parts[1]) return parts[1]; // direct UCxxxx ID
+    if(parts.length > 0) handle = parts[parts.length-1].replace('@','');
+  } catch(e) {
+    handle = nameOrUrl.replace('@','').trim();
+  }
+
+  if(!handle) return null;
+  if(/^UC[\w-]{20,}$/.test(handle)) return handle; // already a channel ID
+
+  if(_ytChannelIdCache[handle]) return _ytChannelIdCache[handle];
+
+  // 1. forHandle — most reliable for @handles (YouTube API v3)
+  try {
+    const r = await fetch(
+      'https://www.googleapis.com/youtube/v3/channels?part=id&forHandle='
+      + encodeURIComponent(handle) + '&key=' + YT_API_KEY
+    );
+    const d = await r.json();
+    if(d?.error){
+      console.warn('[YT] API error:', d.error.code, d.error.message);
+      return null; // Stop trying — API key issue, no point retrying
+    }
+    const id = d?.items?.[0]?.id;
+    if(id){ _ytChannelIdCache[handle]=id; console.log('[YT] forHandle resolved:', handle,'->',id); return id; }
+  } catch(e){ console.warn('[YT] fetch error:', e.message); }
+
+  // 2. forUsername — for old-style usernames
+  try {
+    const r = await fetch(
+      'https://www.googleapis.com/youtube/v3/channels?part=id&forUsername='
+      + encodeURIComponent(handle) + '&key=' + YT_API_KEY
+    );
+    const d = await r.json();
+    if(d?.error) return null;
+    const id = d?.items?.[0]?.id;
+    if(id){ _ytChannelIdCache[handle]=id; console.log('[YT] forUsername resolved:', handle,'->',id); return id; }
+  } catch(e){}
+
+  // 3. Search as last resort
+  try {
+    const r = await fetch(
+      'https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&q='
+      + encodeURIComponent(handle) + '&maxResults=1&key=' + YT_API_KEY
+    );
+    const d = await r.json();
+    if(d?.error) return null;
+    const id = d?.items?.[0]?.snippet?.channelId;
+    if(id){ _ytChannelIdCache[handle]=id; console.log('[YT] search resolved:', handle,'->',id); return id; }
+  } catch(e){}
+
+  console.warn('[YT] Could not resolve channel ID for handle:', handle);
+  return null;
+}
+
+async function checkYouTubeLive(channelNameOrUrl){
+  try{
+    const channelId = await resolveYouTubeChannelId(channelNameOrUrl);
+    if(!channelId){ console.warn('[YT] Could not resolve channel ID for:', channelNameOrUrl); return false; }
+    const url = 'https://www.googleapis.com/youtube/v3/search'
+      + '?part=snippet&channelId=' + channelId
+      + '&eventType=live&type=video'
+      + '&key=' + YT_API_KEY;
+    const res = await fetch(url);
+    if(!res.ok){ console.warn('[YT] API error:', res.status); return false; }
+    const data = await res.json();
+    const live = !!(data?.items?.length > 0);
+    console.log('[YT]', channelNameOrUrl, '->', channelId, '-> live:', live);
+    return live;
+  }catch(e){ console.warn('[YT] Exception:', e); return false; }
+}
+
+async function autoCheckAllStreamers(){
+  let anyChanged=false;
+  for(const s of streamers){
+    for(const plat of s.platforms){
+      const link = s.links[plat];
+      if(!link || link==='#') continue;
+      const chanName = extractChannelName(link);
+      // For YouTube we pass the full link; for others we need chanName
+      if(plat !== 'youtube' && (!chanName || chanName==='#')) continue;
+
+      let nowLive=false;
+      try{
+        if(plat==='twitch')       nowLive = await checkTwitchLive(chanName);
+        else if(plat==='kick')    nowLive = await checkKickLive(chanName);
+        else if(plat==='youtube') nowLive = await checkYouTubeLive(link); // full URL
+      }catch(e){ continue; }
+
+      const targetChar = s.chars.find(c=>c.activePlat===plat) || activeChar(s);
+      if(!targetChar) continue;
+
+      if(nowLive !== targetChar.live){
+        const wasLive = targetChar.live;
+        targetChar.live = nowLive;
+        if(nowLive && !wasLive){
+          targetChar.liveCount++;
+          addLH(s, targetChar);
+          if(subEnabled) pushNotif('\uD83D\uDD34','<strong>'+s.name+'</strong> entrou ao vivo como <em>'+targetChar.name+'</em>!');
+        }
+        anyChanged = true;
+      }
+      if(nowLive) break;
+    }
+  }
+  if(anyChanged){ saveAll(); renderHome(); renderNotifBadge(); }
+  const liveCount = streamers.filter(isLive).length;
+  const btn = document.getElementById('autoCheckBtn');
+  if(btn){ btn.textContent='\uD83D\uDD04 Verificar ('+liveCount+' ao vivo)'; btn.disabled=false; }
+}
+
+function extractChannelName(url){
+  if(!url||url==='#')return null;
+  try{
+    const u=new URL(url);
+    const parts=u.pathname.split('/').filter(Boolean);
+    if(parts.length>0)return parts[parts.length-1].replace('@','');
+  }catch{
+    const parts=url.split('/').filter(Boolean);
+    return parts.length?parts[parts.length-1].replace('@',''):null;
+  }
+  return null;
+}
+
+let _autoInterval=null;
+function startAutoCheck(){
+  autoCheckAllStreamers();
+  if(_autoInterval)clearInterval(_autoInterval);
+  _autoInterval=setInterval(autoCheckAllStreamers,3*60*1000);
+}
+
+// ── QUICK LIVE BAR ──
+function renderQuickLiveBar(){
+  let bar = document.getElementById('qlBar');
+  if(!bar){
+    bar = document.createElement('div');
+    bar.id = 'qlBar';
+    bar.style.cssText = 'position:fixed;bottom:1.2rem;right:1.2rem;z-index:490;min-width:230px;max-width:280px';
+    document.body.appendChild(bar);
+  }
+
+  // Build HTML using DOM to avoid any quote escaping issues
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = 'background:#09070f;border:1px solid #2c2045;border-radius:10px;padding:.85rem 1rem;box-shadow:0 8px 32px rgba(0,0,0,.75)';
+
+  // Header row
+  const header = document.createElement('div');
+  header.style.cssText = 'font-family:var(--head);font-size:.6rem;letter-spacing:.2em;color:var(--gold3);text-transform:uppercase;margin-bottom:.65rem;display:flex;align-items:center;justify-content:space-between';
+  header.innerHTML = '<span>&#x26A1; Toggle R\u00e1pido</span>';
+  const closeBtn = document.createElement('button');
+  closeBtn.textContent = '\u00d7';
+  closeBtn.style.cssText = 'background:transparent;border:none;color:#4a4060;cursor:pointer;font-size:1rem;line-height:1';
+  closeBtn.onclick = function(){ const el=document.getElementById('qlBar'); if(el)el.remove(); };
+  header.appendChild(closeBtn);
+  wrapper.appendChild(header);
+
+  // Streamer rows
+  streamers.forEach(function(s){
+    const row = document.createElement('div');
+    row.style.cssText = 'margin-bottom:.55rem';
+
+    const nameEl = document.createElement('div');
+    nameEl.style.cssText = 'font-family:var(--head);font-size:.7rem;color:var(--cream);letter-spacing:.04em;margin-bottom:.28rem';
+    nameEl.textContent = s.name;
+    row.appendChild(nameEl);
+
+    const btns = document.createElement('div');
+    btns.style.cssText = 'display:flex;flex-wrap:wrap;gap:.28rem';
+
+    s.chars.forEach(function(c){
+      const btn = document.createElement('button');
+      btn.textContent = (c.live ? '\uD83D\uDD34 ' : '') + c.name.split(' ')[0];
+      btn.style.cssText = 'font-family:var(--mono);font-size:.58rem;padding:.22rem .55rem;border-radius:3px;cursor:pointer;transition:all .2s;'
+        + 'border:1px solid ' + (c.live ? '#6e1e1e' : '#1c1830') + ';'
+        + 'background:' + (c.live ? 'rgba(255,58,58,.15)' : 'transparent') + ';'
+        + 'color:' + (c.live ? '#ff7070' : '#4a4060');
+      btn.onclick = (function(sid, cid){ return function(){ quickToggle(sid, cid); }; })(s.id, c.id);
+      btns.appendChild(btn);
+    });
+    row.appendChild(btns);
+    wrapper.appendChild(row);
+  });
+
+  // Check button
+  const checkBtn = document.createElement('button');
+  checkBtn.id = 'autoCheckBtn';
+  checkBtn.textContent = '\uD83D\uDD04 Verificar Kick/Twitch';
+  checkBtn.style.cssText = 'width:100%;margin-top:.55rem;padding:.42rem;background:rgba(201,168,76,.07);border:1px solid #3a2c10;color:#7a5e20;border-radius:6px;font-family:var(--head);font-size:.6rem;letter-spacing:.1em;cursor:pointer';
+  checkBtn.onclick = runCheck;
+  wrapper.appendChild(checkBtn);
+
+  bar.innerHTML = '';
+  bar.appendChild(wrapper);
+}
+
+function quickToggle(sid, cid){
+  const s = streamers.find(function(x){ return x.id === sid; });
+  if(!s) return;
+  const c = s.chars.find(function(x){ return x.id === cid; });
+  if(!c) return;
+  c.live = !c.live;
+  if(c.live){
+    c.liveCount++;
+    addLH(s, c);
+    if(subEnabled) pushNotif('\uD83D\uDD34', '<strong>' + s.name + '</strong> ao vivo como <em>' + c.name + '</em>!');
+  }
+  saveAll();
+  renderHome();
+  renderQuickLiveBar();
+  showToast(c.live ? '\uD83D\uDD34 ' + c.name + ' AO VIVO!' : c.name + ' offline.');
+}
+
+async function runCheck(){
+  const btn = document.getElementById('autoCheckBtn');
+  if(btn){ btn.textContent = '\u23F3 Verificando...'; btn.disabled = true; }
+
+  // Capture console messages to show in UI
+  const logs = [];
+  const _log = console.log, _warn = console.warn;
+  console.log  = function(){ logs.push({t:'ok',   m: Array.from(arguments).join(' ')}); _log.apply(console, arguments); };
+  console.warn = function(){ logs.push({t:'warn', m: Array.from(arguments).join(' ')}); _warn.apply(console, arguments); };
+
+  await autoCheckAllStreamers();
+
+  console.log = _log; console.warn = _warn;
+
+  // Build result panel
+  let diag = document.getElementById('diagOverlay');
+  if(!diag){
+    diag = document.createElement('div');
+    diag.id = 'diagOverlay';
+    diag.style.cssText = 'position:fixed;bottom:6rem;right:1.2rem;z-index:500;background:#07060e;border:1px solid #2c2045;border-radius:10px;padding:1rem;min-width:260px;max-width:320px;font-family:var(--mono);font-size:.7rem;box-shadow:0 8px 32px rgba(0,0,0,.8);max-height:70vh;overflow-y:auto';
+    document.body.appendChild(diag);
+  }
+
+  const liveNow = streamers.filter(isLive);
+  let html = '<div style="color:var(--gold3);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.6rem">\uD83D\uDCE1 Resultado \u2014 ' + liveNow.length + ' ao vivo</div>';
+
+  // Status per streamer
+  streamers.forEach(function(s){
+    var live = isLive(s);
+    html += '<div style="display:flex;align-items:center;gap:.5rem;padding:.3rem 0;border-bottom:1px solid #1a1530">'
+      + '<span>' + (live?'\uD83D\uDD34':'\u26AA') + '</span>'
+      + '<span style="color:' + (live?'var(--cream)':'#4a4060') + ';flex:1">' + s.name + '</span>'
+      + '<span style="color:' + (live?'#ff7070':'#3a3260') + '">' + (live?'AO VIVO':'offline') + '</span>'
+      + '</div>';
+  });
+
+  // YouTube specific logs
+  var ytLogs = logs.filter(function(l){ return l.m.indexOf('[YT]') !== -1; });
+  if(ytLogs.length){
+    html += '<div style="margin-top:.6rem;padding-top:.5rem;border-top:1px solid #1a1530">'
+      + '<div style="color:#3a3260;margin-bottom:.35rem">YouTube debug:</div>';
+    ytLogs.forEach(function(l){
+      html += '<div style="color:' + (l.t==='warn'?'#c0392b':'#3a7a4a') + ';margin-bottom:.2rem;word-break:break-all">' + l.m + '</div>';
+    });
+    html += '</div>';
+  }
+
+  html += '<button onclick="document.getElementById(\'diagOverlay\').remove()" '
+    + 'style="width:100%;margin-top:.7rem;padding:.35rem;background:transparent;border:1px solid #2c2045;color:#4a4060;border-radius:5px;cursor:pointer;font-family:var(--mono);font-size:.65rem">Fechar</button>';
+
+  diag.innerHTML = html;
+  renderQuickLiveBar();
+}
+
+// Show quick bar when admin opens
+function showQuickBarIfNeeded(){
+  if(!document.getElementById('qlBar')) renderQuickLiveBar();
+}
+
+
+// ══════════════════════════════════════════
+// MEDIA PLAYER
+// ══════════════════════════════════════════
+let playerState = {
+  streamerId: null,
+  platform: null,
+  chatOpen: false,
+  isMini: false,
+  currentLink: '#'
+};
+
+function buildEmbedUrl(platform, link) {
+  var chan = extractChannelName(link);
+  if (!chan || chan === '#') return null;
+  var host = location.hostname;
+  if (platform === 'twitch') {
+    if (!host || host === 'localhost' || host === '127.0.0.1') return null;
+    return 'https://player.twitch.tv/?channel=' + chan + '&parent=' + host + '&autoplay=true';
+  }
+  if (platform === 'kick') return 'https://player.kick.com/' + chan + '?autoplay=true';
+  // YouTube needs live video ID from API — use buildYouTubeEmbedUrl() instead
+  return null;
+}
+
+// Cache for live video IDs per channel
+var _ytLiveVideoCache = {};
+
+async function buildYouTubeEmbedUrl(link) {
+  try {
+    var channelId = await resolveYouTubeChannelId(link);
+    if (!channelId) return null;
+
+    // Check cache first
+    if (_ytLiveVideoCache[channelId]) {
+      return 'https://www.youtube.com/embed/' + _ytLiveVideoCache[channelId] + '?autoplay=1&rel=0';
+    }
+
+    // Fetch active live video ID for this channel
+    var res = await fetch(
+      'https://www.googleapis.com/youtube/v3/search'
+      + '?part=id&channelId=' + channelId
+      + '&eventType=live&type=video'
+      + '&maxResults=1&key=' + YT_API_KEY
+    );
+    if (!res.ok) return null;
+    var data = await res.json();
+    if (data.error) return null;
+    var videoId = data?.items?.[0]?.id?.videoId;
+    if (!videoId) return null;
+    _ytLiveVideoCache[channelId] = videoId;
+    // Clear cache after 5 min so we re-fetch if stream changes
+    setTimeout(function() { delete _ytLiveVideoCache[channelId]; }, 5 * 60 * 1000);
+    return 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0';
+  } catch(e) {
+    return null;
+  }
+}
+
+function openStreamPopup(url, name) {
+  if (!url || url === '#') return;
+  var w = Math.min(1100, screen.width  * 0.85);
+  var h = Math.min(680,  screen.height * 0.85);
+  var l = Math.round((screen.width  - w) / 2);
+  var t = Math.round((screen.height - h) / 2);
+  var feat = 'width='+w+',height='+h+',left='+l+',top='+t+',resizable=yes,toolbar=no,menubar=no,location=yes';
+  var win = window.open(url, 'cda_stream', feat);
+  if (!win) window.open(url, '_blank');
+}
+
+function openPlayer(streamerId, platform) {
+  const s = streamers.find(x => x.id === streamerId);
+  if (!s) return;
+
+  playerState.streamerId = streamerId;
+  playerState.platform   = platform || s.platforms[0];
+  playerState.chatOpen   = false;
+
+  // close mini if open
+  closeMiniPlayer();
+
+  renderPlayerContent();
+  document.getElementById('playerOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function renderPlayerContent() {
+  const s = streamers.find(x => x.id === playerState.streamerId);
+  if (!s) return;
+  const plat = playerState.platform;
+  const link = s.links[plat] || '#';
+  playerState.currentLink = link;
+  const live = isLive(s);
+  const ac   = activeChar(s);
+
+  // avatar
+  const avEl = document.getElementById('playerAvatar');
+  if (s.avatar) {
+    avEl.innerHTML = '<img src="' + s.avatar + '" onerror="this.remove()"/>';
+  } else {
+    avEl.textContent = initials(s.name);
+  }
+
+  document.getElementById('playerName').textContent = s.name;
+  document.getElementById('playerChar').textContent  = ac ? ac.name + ' · ' + (CAT[ac.cat] || '') : '';
+  document.getElementById('playerLiveBadge').style.display = live ? '' : 'none';
+
+  // platform tabs
+  const tabs = document.getElementById('playerPlatTabs');
+  tabs.innerHTML = '';
+  s.platforms.forEach(function(p) {
+    const btn = document.createElement('button');
+    btn.className = 'pptab ' + p + (p === plat ? ' active' : '');
+    btn.textContent = PLAT_L[p];
+    btn.onclick = function() {
+      playerState.platform = p;
+      renderPlayerContent();
+    };
+    tabs.appendChild(btn);
+  });
+
+  // stage
+  var stage = document.getElementById('playerStage');
+  stage.innerHTML = '';
+
+  // Show loading spinner while resolving embed URL
+  var loadEl = document.createElement('div');
+  loadEl.style.cssText = 'width:100%;min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7rem;background:#000;color:#3a3260;font-family:var(--mono);font-size:.75rem';
+  loadEl.innerHTML = '<div style="width:32px;height:32px;border:3px solid #2a2040;border-top-color:var(--gold3);border-radius:50%;animation:spin 1s linear infinite"></div><span>Carregando player...</span>';
+  stage.appendChild(loadEl);
+
+  // Resolve embed URL (async for YouTube)
+  (async function() {
+    var embedUrl;
+    if (plat === 'youtube') {
+      embedUrl = await buildYouTubeEmbedUrl(link);
+    } else {
+      embedUrl = buildEmbedUrl(plat, link);
+    }
+    stage.innerHTML = '';
+    if (embedUrl) {
+      var ifr = document.createElement('iframe');
+      ifr.src = embedUrl;
+      ifr.allowFullscreen = true;
+      ifr.setAttribute('allow', 'autoplay; fullscreen');
+      ifr.style.cssText = 'width:100%;height:100%;border:none;display:block;min-height:340px';
+      stage.appendChild(ifr);
+    } else {
+    var card = document.createElement('div');
+    card.className = 'player-no-embed';
+    var platBg = plat==='twitch'?'#9147ff':plat==='kick'?'#53fc18':'#ff0000';
+    var platFg = plat==='kick'?'#000':'#fff';
+    var icoEl = document.createElement('span');
+    icoEl.className = 'big-ico';
+    icoEl.textContent = plat==='twitch'?'T':plat==='kick'?'K':'YT';
+    card.appendChild(icoEl);
+    var ttlEl = document.createElement('strong');
+    ttlEl.style.cssText = 'color:var(--cream);font-family:var(--head);font-size:.95rem;letter-spacing:.05em';
+    ttlEl.textContent = s.name + ' no ' + PLAT_L[plat];
+    card.appendChild(ttlEl);
+    var host = location.hostname;
+    var isTwitchLocal = plat==='twitch' && (!host||host==='localhost'||host==='127.0.0.1');
+    var reasonEl = document.createElement('span');
+    reasonEl.style.cssText = 'color:#5a5070;font-size:.8rem;max-width:340px;text-align:center;line-height:1.6';
+    reasonEl.textContent = isTwitchLocal
+      ? 'O Twitch bloqueia embeds em arquivos locais. Use o botao abaixo para abrir numa janela separada.'
+      : 'Clique para assistir.';
+    card.appendChild(reasonEl);
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center;margin-top:.6rem';
+    var popBtn = document.createElement('button');
+    popBtn.style.cssText = 'padding:.6rem 1.5rem;background:'+platBg+';color:'+platFg+';border:none;border-radius:6px;font-family:var(--head);font-size:.82rem;font-weight:700;letter-spacing:.1em;cursor:pointer';
+    popBtn.textContent = '\u25B6 Abrir Player';
+    var _pu = link, _pn = s.name;
+    popBtn.onclick = function(){ openStreamPopup(_pu, _pn); };
+    row.appendChild(popBtn);
+    var tabA = document.createElement('a');
+    tabA.href = link; tabA.target = '_blank'; tabA.rel = 'noopener';
+    tabA.style.cssText = 'padding:.6rem 1.2rem;background:transparent;border:1px solid var(--border2);color:#7a7090;border-radius:6px;font-family:var(--head);font-size:.8rem;letter-spacing:.08em;text-decoration:none;display:inline-flex;align-items:center';
+    tabA.textContent = '\u2197 Nova aba';
+    row.appendChild(tabA);
+    card.appendChild(row);
+    if (isTwitchLocal) {
+      var tipEl = document.createElement('span');
+      tipEl.style.cssText = 'color:#3a3260;font-size:.66rem;margin-top:.9rem;max-width:300px;text-align:center;line-height:1.6';
+      tipEl.textContent = 'Kick e YouTube abrem direto aqui. Para Twitch, hospede o site num servidor (ex: GitHub Pages).';
+      card.appendChild(tipEl);
+    }
+    stage.appendChild(card);
+    }
+  })(); // end async embed resolver
+
+  // bottom info
+  const totalLivesChar = s.chars.reduce(function(a,c){return a+c.liveCount},0);
+  document.getElementById('playerBottomInfo').innerHTML =
+    '<span>🎬 ' + totalLivesChar + ' lives</span>' +
+    '<span>👁 ' + (s.views||0).toLocaleString('pt-BR') + ' views</span>' +
+    '<span style="color:var(--gold3)">' + (live ? '🔴 Ao Vivo' : '⭕ Offline') + '</span>';
+
+  // load chat
+  loadPlayerChat(s.id);
+
+  // sync mini if open
+  const mini = document.getElementById('miniPlayer');
+  if (mini.classList.contains('open')) {
+    renderMiniContent();
+  }
+}
+
+function closePlayer() {
+  document.getElementById('playerOverlay').classList.remove('open');
+  document.getElementById('playerStage').innerHTML = '';
+  document.body.style.overflow = '';
+  playerState.streamerId = null;
+}
+
+function openExternal() {
+  if (playerState.currentLink && playerState.currentLink !== '#') {
+    window.open(playerState.currentLink, '_blank', 'noopener');
+  }
+}
+
+// ── chat inside player ──
+function loadPlayerChat(sid) {
+  const chatKey = 'cda_chat_' + sid;
+  const msgs = gl(chatKey, []);
+  const el = document.getElementById('playerChatMsgs');
+  if (!el) return;
+  el.innerHTML = '';
+  msgs.slice(-40).forEach(function(m) { appendPlayerMsg(m); });
+  el.scrollTop = el.scrollHeight;
+  document.getElementById('playerChatCount').textContent = msgs.length + ' msgs';
+}
+
+function appendPlayerMsg(m) {
+  const el = document.getElementById('playerChatMsgs');
+  if (!el) return;
+  const div = document.createElement('div');
+  div.className = 'pcm' + (m.role === 'system' ? ' sys' : '');
+  if (m.role === 'system') {
+    div.innerHTML = '<span class="pt">' + m.text + '</span>';
+  } else {
+    div.innerHTML = '<span class="pn ' + (m.role||'user') + '">' + m.nick + '</span><span class="pt">' + m.text + '</span>';
+  }
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+  const cnt = document.getElementById('playerChatCount');
+  if (cnt) {
+    const n = parseInt(cnt.textContent) || 0;
+    cnt.textContent = (n + 1) + ' msgs';
+  }
+}
+
+function sendPlayerChat() {
+  const inp = document.getElementById('playerChatIn');
+  if (!inp) return;
+  const text = inp.value.trim();
+  if (!text || !playerState.streamerId) return;
+  const nick = document.getElementById('playerNickInput')?.value.trim() || 'Visitante';
+  const msg = { nick, text, ts: Date.now(), role: 'user' };
+  inp.value = '';
+  appendPlayerMsg(msg);
+  const chatKey = 'cda_chat_' + playerState.streamerId;
+  const msgs = gl(chatKey, []);
+  msgs.push(msg);
+  if (msgs.length > 200) msgs.splice(0, msgs.length - 200);
+  sl(chatKey, msgs);
+}
+
+function togglePlayerChat() {
+  playerState.chatOpen = !playerState.chatOpen;
+  const panel = document.getElementById('playerChatPanel');
+  const btn   = document.getElementById('chatToggleBtn');
+  if (panel) panel.style.display = playerState.chatOpen ? '' : 'none';
+  if (btn)   btn.classList.toggle('active', playerState.chatOpen);
+  if (playerState.chatOpen && playerState.streamerId) {
+    loadPlayerChat(playerState.streamerId);
+  }
+}
+
+// ── mini player ──
+function toggleMiniPlayer() {
+  const mini = document.getElementById('miniPlayer');
+  if (mini.classList.contains('open')) {
+    // already mini: expand back
+    expandMiniPlayer();
+  } else {
+    // go mini
+    document.getElementById('playerOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+    renderMiniContent();
+    mini.classList.add('open');
+    playerState.isMini = true;
+  }
+}
+
+function renderMiniContent() {
+  const s = playerState.streamerId ? streamers.find(x => x.id === playerState.streamerId) : null;
+  if (!s) return;
+  const plat = playerState.platform || s.platforms[0];
+  const link = s.links[plat] || '#';
+  const embedUrl = buildEmbedUrl(plat, link);
+  const stage = document.getElementById('miniStage');
+  document.getElementById('miniBarName').textContent = s.name + ' - ' + PLAT_L[plat];
+  stage.innerHTML = '';
+  (async function() {
+    var embedUrl;
+    if (plat === 'youtube') {
+      embedUrl = await buildYouTubeEmbedUrl(link);
+    } else {
+      embedUrl = buildEmbedUrl(plat, link);
+    }
+    if (embedUrl) {
+      var mifr = document.createElement('iframe');
+      mifr.src = embedUrl;
+      mifr.allowFullscreen = true;
+      mifr.setAttribute('allow','autoplay; fullscreen');
+      mifr.style.cssText = 'width:100%;height:100%;border:none;display:block';
+      stage.appendChild(mifr);
+    } else {
+    var mwrap = document.createElement('div');
+    mwrap.style.cssText = 'width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;background:var(--surface);color:#4a4060;font-family:var(--mono);font-size:.7rem;text-align:center;padding:1rem';
+    var mico = document.createElement('span'); mico.style.opacity='0.3'; mico.style.fontSize='1.5rem'; mico.textContent='TV';
+    var mnm  = document.createElement('span'); mnm.textContent = s.name;
+    var mbtn = document.createElement('button');
+    mbtn.style.cssText = 'padding:.32rem .85rem;background:#9147ff;color:#fff;border:none;border-radius:5px;font-family:var(--head);font-size:.6rem;cursor:pointer;margin-top:.3rem';
+    mbtn.textContent = '\u25B6 Abrir';
+    var _ml = link, _mn = s.name;
+    mbtn.onclick = function(){ openStreamPopup(_ml, _mn); };
+    mwrap.appendChild(mico); mwrap.appendChild(mnm); mwrap.appendChild(mbtn);
+    stage.appendChild(mwrap);
+    }
+  })();
+}
+
+function expandMiniPlayer() {
+  closeMiniPlayer();
+  if (playerState.streamerId) {
+    openPlayer(playerState.streamerId, playerState.platform);
+  }
+}
+
+function closeMiniPlayer() {
+  const mini = document.getElementById('miniPlayer');
+  mini.classList.remove('open');
+  document.getElementById('miniStage').innerHTML = '';
+  playerState.isMini = false;
+}
+
+// close overlay on backdrop click
+document.getElementById('playerOverlay').addEventListener('click', function(e) {
+  if (e.target === document.getElementById('playerOverlay')) closePlayer();
+});
+
+// ESC to close
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    if (document.getElementById('playerOverlay').classList.contains('open')) closePlayer();
+  }
+});
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+renderHome();
+renderNotifBadge();
+const subBtn=document.getElementById('subToggle');
+if(subBtn){subBtn.textContent=subEnabled?'Ativado':'Ativar';subBtn.classList.toggle('on',subEnabled);}
+// Auto check after 2s and every 3 min
+setTimeout(startAutoCheck,2000);
+</script>
+</body>
+</html>
